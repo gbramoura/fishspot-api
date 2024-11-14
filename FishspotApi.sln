@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishspotApi.Application", "src\FishspotApi.Application\FishspotApi.Application.csproj", "{27FD8C22-83C6-4A70-B94B-D3C94B5CC56A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FishspotApi.Application", "src\FishspotApi.Application\FishspotApi.Application.csproj", "{27FD8C22-83C6-4A70-B94B-D3C94B5CC56A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FishspotApi.Core", "src\FishspotApi.Core\FishspotApi.Core.csproj", "{A40264A8-7E03-437F-A966-7ED97C781761}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FishspotApi.Domain", "src\FishspotApi.Domain\FishspotApi.Domain.csproj", "{530ADDB9-B59C-49B8-A748-AECF2BE44A59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishspotApi.Data", "src\FishspotApi.Data\FishspotApi.Data.csproj", "{4B5638D3-F646-4FAC-964F-0B536926108D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{27FD8C22-83C6-4A70-B94B-D3C94B5CC56A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27FD8C22-83C6-4A70-B94B-D3C94B5CC56A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27FD8C22-83C6-4A70-B94B-D3C94B5CC56A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A40264A8-7E03-437F-A966-7ED97C781761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A40264A8-7E03-437F-A966-7ED97C781761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A40264A8-7E03-437F-A966-7ED97C781761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A40264A8-7E03-437F-A966-7ED97C781761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{530ADDB9-B59C-49B8-A748-AECF2BE44A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{530ADDB9-B59C-49B8-A748-AECF2BE44A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{530ADDB9-B59C-49B8-A748-AECF2BE44A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{530ADDB9-B59C-49B8-A748-AECF2BE44A59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B5638D3-F646-4FAC-964F-0B536926108D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B5638D3-F646-4FAC-964F-0B536926108D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B5638D3-F646-4FAC-964F-0B536926108D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B5638D3-F646-4FAC-964F-0B536926108D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
