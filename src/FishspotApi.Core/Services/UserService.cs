@@ -74,5 +74,30 @@ namespace FishspotApi.Core.Services
                 RefreshToken = userRefreshToken
             };
         }
+   
+        public RefreshTokenResponse RefreshToken(RefreshTokenRequest payload)
+        {
+            var claims = _token.GetPrincipalFromExpiredToken(payload.Token).Claims;
+            var claim = claims.FirstOrDefault((claim) => claim.Type == "token");
+            var value = claim.Value;
+
+            var savedRefreshToken = _token.GetRefreshToken(value);
+            if (savedRefreshToken != payload.RefreshToken)
+            {
+                throw new RefreshTokenInvalidException("Invalid refresh token");
+            }
+
+            var newJwtToken = _token.GenerateToken(claims);
+            var newRefreshToken = _token.GenerateRefreshToken();
+
+            _token.DeleteRefreshToken(value);
+            _token.SaveRefreshToken(value, newRefreshToken, newJwtToken);
+
+            return new RefreshTokenResponse
+            {
+                RefreshToken = newJwtToken,
+                Token = newRefreshToken
+            };
+        }
     }
 }

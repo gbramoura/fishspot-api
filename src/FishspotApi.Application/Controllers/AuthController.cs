@@ -2,7 +2,6 @@
 using FishspotApi.Domain.Exception;
 using FishspotApi.Domain.Http;
 using FishspotApi.Domain.Http.Request;
-using FishspotApi.Domain.Http.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,13 +68,7 @@ namespace fishspot_api.Application.Controllers
 
                 http.Code = StatusCodes.Status200OK;
                 http.Message = "User was correctly authenticated.";
-                http.Response = new UserLoginResponse
-                {
-                    Email = userResponse.Email,
-                    Name = userResponse.Name,
-                    Token = userResponse.Token,
-                    RefreshToken = userResponse.RefreshToken,
-                };
+                http.Response = userResponse;
 
                 return StatusCode(http.Code, http);
             }
@@ -93,5 +86,40 @@ namespace fishspot_api.Application.Controllers
                 return StatusCode(http.Code, http);
             }
         }
+
+        [HttpPost("refresh-token/")]
+        [AllowAnonymous]
+        public ActionResult<DefaultResponse> AtualizarToken([FromBody] RefreshTokenRequest body)
+        {
+            DefaultResponse http = new DefaultResponse()
+            {
+                Code = StatusCodes.Status400BadRequest,
+                Message = "Dont't authorized."
+            };
+
+            try
+            {
+                var refreshResponse = _userService.RefreshToken(body);
+
+                http.Code = StatusCodes.Status200OK;
+                http.Message = "Token refreshed";
+                http.Response = refreshResponse;
+
+                return StatusCode(http.Code, http);
+            }
+            catch (RefreshTokenInvalidException e)
+            {
+                http.Message = e.Message;
+                return StatusCode(http.Code, http);
+            }
+            catch (Exception e)
+            {
+                http.Code = StatusCodes.Status500InternalServerError;
+                http.Message = "Internal Server Error";
+                http.Error = e.Message;
+                return StatusCode(http.Code, http);
+            }
+        }
+
     }
 }
