@@ -1,4 +1,6 @@
-﻿using FishspotApi.Data;
+﻿using FishspotApi.Core.Repository;
+using FishspotApi.Core.Services;
+using FishspotApi.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FishspotApi.Core
@@ -12,6 +14,10 @@ namespace FishspotApi.Core
         public static void AddCoreDependency(this IServiceCollection services)
         {
             services.AddDataDependency();
+            services.AddScoped<TokenRepository>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<TokenService>();
+            services.AddScoped<UserService>();
         }
     }
 }
