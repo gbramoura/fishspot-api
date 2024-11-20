@@ -6,7 +6,6 @@ namespace FishspotApi.Core.Repository
 {
     public class RecoverPasswordRepository(FishspotApiContext mongo) : BaseRepository<RecoverPasswordEntity>(mongo, "recover_password")
     {
-
         public RecoverPasswordEntity GetByTokenAndEmail(string token, string email)
         {
             var filter = Builders<RecoverPasswordEntity>.Filter.And(

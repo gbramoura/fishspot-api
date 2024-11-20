@@ -6,7 +6,6 @@ namespace FishspotApi.Core.Repository
 {
     public class TokenRepository(FishspotApiContext mongo) : BaseRepository<TokenEntity>(mongo, "token")
     {
-
         public TokenEntity GetByActor(string actorId)
         {
             var filter = Builders<TokenEntity>.Filter.Eq(entity => entity.Actor, actorId);

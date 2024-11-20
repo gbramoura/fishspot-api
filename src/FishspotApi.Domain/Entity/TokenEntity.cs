@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace FishspotApi.Domain.Entity
 {
@@ -13,6 +13,5 @@ namespace FishspotApi.Domain.Entity
 
         [BsonElement("token"), BsonRepresentation(BsonType.String)]
         public string Token { get; set; }
-
     }
 }

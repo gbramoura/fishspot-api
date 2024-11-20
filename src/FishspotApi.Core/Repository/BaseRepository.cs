@@ -8,7 +8,7 @@ namespace FishspotApi.Core.Repository
     {
         public readonly IMongoCollection<T>? _db;
 
-        public BaseRepository(FishspotApiContext mongo, string collection) 
+        public BaseRepository(FishspotApiContext mongo, string collection)
         {
             _db = mongo.Database?.GetCollection<T>(collection);
         }

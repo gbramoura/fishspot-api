@@ -5,7 +5,7 @@ using FishspotApi.Domain.Http.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace fishspot_api.Application.Controllers
+namespace FishpotApi.Application.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -36,7 +36,6 @@ namespace fishspot_api.Application.Controllers
                 http.Code = StatusCodes.Status201Created;
                 http.Message = "User registered succesfully";
                 return StatusCode(http.Code, http);
-
             }
             catch (Exception E)
             {
@@ -68,7 +67,7 @@ namespace fishspot_api.Application.Controllers
                 return StatusCode(http.Code, http);
             }
             catch (UserNotFoundException e)
-            { 
+            {
                 http.Message = e.Message;
                 return StatusCode(http.Code, http);
             }
@@ -179,7 +178,7 @@ namespace fishspot_api.Application.Controllers
             {
                 http.Message = e.Message;
                 return StatusCode(http.Code, http);
-            }            
+            }
             catch (Exception E)
             {
                 http.Code = StatusCodes.Status500InternalServerError;
@@ -188,6 +187,5 @@ namespace fishspot_api.Application.Controllers
                 return StatusCode(http.Code, http);
             }
         }
-
     }
 }

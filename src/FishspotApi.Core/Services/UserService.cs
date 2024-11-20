@@ -1,10 +1,10 @@
 ﻿using FishspotApi.Core.Repository;
 using FishspotApi.Core.Utils;
 using FishspotApi.Domain.Entity;
+using FishspotApi.Domain.Exception;
 using FishspotApi.Domain.Http.Request;
 using FishspotApi.Domain.Http.Response;
 using System.Security.Claims;
-using FishspotApi.Domain.Exception;
 using System.Text;
 
 namespace FishspotApi.Core.Services
@@ -71,7 +71,7 @@ namespace FishspotApi.Core.Services
                 RefreshToken = userRefreshToken
             };
         }
-   
+
         public RefreshTokenResponse RefreshToken(RefreshTokenRequest payload)
         {
             var claims = _token.GetPrincipalFromExpiredToken(payload.Token).Claims;
@@ -100,7 +100,7 @@ namespace FishspotApi.Core.Services
         public void GenerateRecoverToken(RecoverPasswordRequest payload)
         {
             var user = _user.GetByEmail(payload.Email).FirstOrDefault();
-            
+
             if (user is null)
             {
                 throw new UserNotFoundException("User not found");
@@ -118,7 +118,6 @@ namespace FishspotApi.Core.Services
                 throw new UserNotFoundException("User not found");
             }
 
-            
             if (VerifyToken(payload.Token, payload.Email))
             {
                 throw new InvalidRecoverTokenException("The token is invalid");
@@ -135,7 +134,7 @@ namespace FishspotApi.Core.Services
             var random = new Random();
             char letter;
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 5; i++)
             {
                 int shift = Convert.ToInt32(Math.Floor(25 * random.NextDouble()));
                 letter = Convert.ToChar(shift + 65);
@@ -162,12 +161,12 @@ namespace FishspotApi.Core.Services
                 return false;
             }
 
-            var isRecoverTokenValid = 
-                recoverToken.ExpirationDate < date.AddMinutes(-5) && 
+            var isRecoverTokenValid =
+                recoverToken.ExpirationDate < date.AddMinutes(-5) &&
                 recoverToken.ExpirationDate > date.AddMinutes(5);
 
             _recoverPassword.Delete(recoverToken.Id);
-            
+
             return isRecoverTokenValid;
         }
     }

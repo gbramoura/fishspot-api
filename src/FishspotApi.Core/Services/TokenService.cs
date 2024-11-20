@@ -42,7 +42,6 @@ namespace FishspotApi.Core.Services
                     IssuerSigningKey = mySecurityKey,
                     ValidateIssuer = false,
                     ValidateAudience = false,
-
                 }, out SecurityToken validatedToken);
             }
             catch
