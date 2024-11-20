@@ -9,8 +9,8 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["FishspotApi.Application/FishspotApi.Application.csproj", "FishspotApi.Application/"]
-RUN dotnet restore "./FishspotApi.Application/FishspotApi.Application.csproj"
+COPY ["./src/FishspotApi.Application/FishspotApi.Application.csproj", "FishspotApi.Application/"]
+RUN dotnet restore "./src/FishspotApi.Application/FishspotApi.Application.csproj"
 COPY . .
 WORKDIR "/src/FishspotApi.Application"
 RUN dotnet build "./FishspotApi.Application.csproj" -c $BUILD_CONFIGURATION -o /app/build

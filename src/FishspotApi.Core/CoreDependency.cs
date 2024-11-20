@@ -16,8 +16,10 @@ namespace FishspotApi.Core
             services.AddDataDependency();
             services.AddScoped<TokenRepository>();
             services.AddScoped<UserRepository>();
+            services.AddScoped<RecoverPasswordRepository>();
             services.AddScoped<TokenService>();
             services.AddScoped<UserService>();
+            services.AddScoped<MailService>();
         }
     }
 }

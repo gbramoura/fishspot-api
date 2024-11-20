@@ -1,6 +1,0 @@
-@fishspot_api.Application_HostAddress = http://localhost:5010
-
-GET {{fishspot_api.Application_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

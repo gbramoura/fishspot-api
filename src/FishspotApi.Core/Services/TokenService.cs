@@ -8,16 +8,10 @@ using System.Text;
 
 namespace FishspotApi.Core.Services
 {
-    public class TokenService
+    public class TokenService(IConfiguration configuration, TokenRepository auth)
     {
-        private readonly IConfiguration _config;
-        private readonly TokenRepository _auth;
-
-        public TokenService(IConfiguration configuration, TokenRepository auth)
-        {
-           _auth = auth;
-           _config = configuration;
-        }
+        private readonly IConfiguration _config = configuration;
+        private readonly TokenRepository _auth = auth;
 
         public string GenerateToken(IEnumerable<Claim> claims)
         {

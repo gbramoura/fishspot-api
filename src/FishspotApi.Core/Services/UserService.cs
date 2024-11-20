@@ -5,27 +5,24 @@ using FishspotApi.Domain.Http.Request;
 using FishspotApi.Domain.Http.Response;
 using System.Security.Claims;
 using FishspotApi.Domain.Exception;
+using System.Text;
 
 namespace FishspotApi.Core.Services
 {
-    public class UserService
+    public class UserService(UserRepository user, RecoverPasswordRepository recover, TokenService token, MailService mail)
     {
-        private readonly UserRepository _user;
-        private readonly TokenService _token;
+        private readonly RecoverPasswordRepository _recoverPassword = recover;
+        private readonly UserRepository _user = user;
+        private readonly TokenService _token = token;
+        private readonly MailService _mail = mail;
 
-        public UserService(UserRepository user, TokenService token)
-        {
-            _user = user;
-            _token = token;
-        }
-
-        public UserResponse RegisterUser(UserRegister registerUser)
+        public UserResponse RegisterUser(UserRegisterRequest payload)
         {
             var user = _user.Insert(new UserEntity
             {
-                Email = registerUser.Email,
-                Name = registerUser.Name,
-                Password = PasswordUtils.EncryptPassword(registerUser.Password),
+                Email = payload.Email,
+                Name = payload.Name,
+                Password = PasswordUtils.EncryptPassword(payload.Password),
                 UniqueIdentifierToken = Guid.NewGuid().ToString()
             });
 
@@ -39,18 +36,18 @@ namespace FishspotApi.Core.Services
 
         public bool IsUniqueEmail(string email) => _user.GetByEmail(email).Any();
 
-        public UserLoginResponse LoginUser(UserLogin loginUser)
+        public UserLoginResponse LoginUser(UserLoginRequest payload)
         {
-            var user = _user.GetByEmail(loginUser.Email).FirstOrDefault();
+            var user = _user.GetByEmail(payload.Email).FirstOrDefault();
 
             if (user is null)
             {
-                throw new LoginUserException("User not found");
+                throw new UserNotFoundException("User not found");
             }
 
-            if (!PasswordUtils.VerifyPassword(user.Password, loginUser.Password))
+            if (!PasswordUtils.VerifyPassword(user.Password, payload.Password))
             {
-                throw new LoginUserException("Password is not correct");
+                throw new IncorrectPasswordException("Password is not correct");
             }
 
             var userRefreshToken = _token.GenerateRefreshToken();
@@ -98,6 +95,80 @@ namespace FishspotApi.Core.Services
                 RefreshToken = newJwtToken,
                 Token = newRefreshToken
             };
+        }
+
+        public void GenerateRecoverToken(RecoverPasswordRequest payload)
+        {
+            var user = _user.GetByEmail(payload.Email).FirstOrDefault();
+            
+            if (user is null)
+            {
+                throw new UserNotFoundException("User not found");
+            }
+
+            _mail.SendRecoverPasswordMail(user.Email, user.Name, GenerateToken(user.Email));
+        }
+
+        public void ChangePassword(ChangePasswordRequest payload)
+        {
+            var user = _user.GetByEmail(payload.Email).FirstOrDefault();
+
+            if (user is null)
+            {
+                throw new UserNotFoundException("User not found");
+            }
+
+            
+            if (VerifyToken(payload.Token, payload.Email))
+            {
+                throw new InvalidRecoverTokenException("The token is invalid");
+            }
+
+            user.Password = PasswordUtils.EncryptPassword(payload.NewPassword);
+
+            _user.Update(user);
+        }
+
+        private string GenerateToken(string email)
+        {
+            var strBuilder = new StringBuilder();
+            var random = new Random();
+            char letter;
+
+            for (int i = 0; i < 8; i++)
+            {
+                int shift = Convert.ToInt32(Math.Floor(25 * random.NextDouble()));
+                letter = Convert.ToChar(shift + 65);
+                strBuilder.Append(letter);
+            }
+
+            _recoverPassword.Insert(new RecoverPasswordEntity
+            {
+                Email = email,
+                Token = strBuilder.ToString(),
+                ExpirationDate = DateTime.Now.AddDays(1)
+            });
+
+            return strBuilder.ToString();
+        }
+
+        private bool VerifyToken(string token, string email)
+        {
+            var recoverToken = _recoverPassword.GetByTokenAndEmail(token, email);
+            var date = DateTime.Now;
+
+            if (recoverToken is null)
+            {
+                return false;
+            }
+
+            var isRecoverTokenValid = 
+                recoverToken.ExpirationDate < date.AddMinutes(-5) && 
+                recoverToken.ExpirationDate > date.AddMinutes(5);
+
+            _recoverPassword.Delete(recoverToken.Id);
+            
+            return isRecoverTokenValid;
         }
     }
 }

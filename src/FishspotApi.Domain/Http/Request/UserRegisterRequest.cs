@@ -2,7 +2,7 @@
 
 namespace FishspotApi.Domain.Http.Request
 {
-    public class UserRegister
+    public class UserRegisterRequest
     {
         [Required(ErrorMessage = "The field name must be filled")]
         [MaxLength(245, ErrorMessage = "The limit of characters 245 has been reached")]

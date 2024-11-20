@@ -9,20 +9,15 @@ namespace fishspot_api.Application.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController(UserService userService) : ControllerBase
     {
-        private readonly UserService _userService;
-
-        public AuthController(UserService userService)
-        {
-            _userService = userService;
-        }
+        private readonly UserService _userService = userService;
 
         [HttpPost("register/")]
         [AllowAnonymous]
-        public ActionResult<DefaultResponse> Register([FromBody] UserRegister body)
+        public ActionResult<DefaultResponse> Register([FromBody] UserRegisterRequest body)
         {
-            DefaultResponse http = new DefaultResponse()
+            var http = new DefaultResponse()
             {
                 Code = StatusCodes.Status400BadRequest,
                 Message = "Dont't authorized"
@@ -54,12 +49,12 @@ namespace fishspot_api.Application.Controllers
 
         [HttpPost("login/")]
         [AllowAnonymous]
-        public ActionResult<DefaultResponse> Login([FromBody] UserLogin body)
+        public ActionResult<DefaultResponse> Login([FromBody] UserLoginRequest body)
         {
-            DefaultResponse http = new DefaultResponse()
+            var http = new DefaultResponse()
             {
                 Code = StatusCodes.Status400BadRequest,
-                Message = "Dont't authorized."
+                Message = "Dont't authorized"
             };
 
             try
@@ -72,11 +67,15 @@ namespace fishspot_api.Application.Controllers
 
                 return StatusCode(http.Code, http);
             }
-            catch (LoginUserException e)
+            catch (UserNotFoundException e)
             { 
                 http.Message = e.Message;
                 return StatusCode(http.Code, http);
-
+            }
+            catch (IncorrectPasswordException e)
+            {
+                http.Message = e.Message;
+                return StatusCode(http.Code, http);
             }
             catch (Exception e)
             {
@@ -91,10 +90,10 @@ namespace fishspot_api.Application.Controllers
         [AllowAnonymous]
         public ActionResult<DefaultResponse> AtualizarToken([FromBody] RefreshTokenRequest body)
         {
-            DefaultResponse http = new DefaultResponse()
+            var http = new DefaultResponse()
             {
                 Code = StatusCodes.Status400BadRequest,
-                Message = "Dont't authorized."
+                Message = "Dont't authorized"
             };
 
             try
@@ -117,6 +116,75 @@ namespace fishspot_api.Application.Controllers
                 http.Code = StatusCodes.Status500InternalServerError;
                 http.Message = "Internal Server Error";
                 http.Error = e.Message;
+                return StatusCode(http.Code, http);
+            }
+        }
+
+        [HttpPost("recover-password/")]
+        [AllowAnonymous]
+        public ActionResult<DefaultResponse> RecoverPassword([FromBody] RecoverPasswordRequest payload)
+        {
+            var http = new DefaultResponse()
+            {
+                Code = StatusCodes.Status400BadRequest,
+                Message = "Dont't authorized."
+            };
+
+            try
+            {
+                _userService.GenerateRecoverToken(payload);
+
+                http.Code = StatusCodes.Status200OK;
+                http.Message = "A validation token was sent to your e-mail";
+                return StatusCode(http.Code, http);
+            }
+            catch (UserNotFoundException e)
+            {
+                http.Message = e.Message;
+                return StatusCode(http.Code, http);
+            }
+            catch (Exception E)
+            {
+                http.Code = StatusCodes.Status500InternalServerError;
+                http.Message = "Internal Server Error";
+                http.Error = E.Message;
+                return StatusCode(http.Code, http);
+            }
+        }
+
+        [HttpPost("change-password/")]
+        [AllowAnonymous]
+        public ActionResult<DefaultResponse> ChangePassword([FromBody] ChangePasswordRequest payload)
+        {
+            var http = new DefaultResponse()
+            {
+                Code = StatusCodes.Status400BadRequest,
+                Message = "Dont't authorized"
+            };
+
+            try
+            {
+                _userService.ChangePassword(payload);
+
+                http.Code = StatusCodes.Status200OK;
+                http.Message = "Password changed successfully";
+                return StatusCode(http.Code, http);
+            }
+            catch (InvalidRecoverTokenException e)
+            {
+                http.Message = e.Message;
+                return StatusCode(http.Code, http);
+            }
+            catch (UserNotFoundException e)
+            {
+                http.Message = e.Message;
+                return StatusCode(http.Code, http);
+            }            
+            catch (Exception E)
+            {
+                http.Code = StatusCodes.Status500InternalServerError;
+                http.Message = "Internal Server Error";
+                http.Error = E.Message;
                 return StatusCode(http.Code, http);
             }
         }

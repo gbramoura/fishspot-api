@@ -2,7 +2,7 @@
 
 namespace FishspotApi.Domain.Http.Request
 {
-    public class UserLogin
+    public class UserLoginRequest
     {
         [Required(ErrorMessage = "The e-mail name must be filled")]
         [EmailAddress(ErrorMessage = "E-mail it not valid")]
