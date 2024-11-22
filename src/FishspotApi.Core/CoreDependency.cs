@@ -1,27 +1,26 @@
-﻿using FishspotApi.Core.Repository;
-using FishspotApi.Core.Services;
-using FishspotApi.Data;
+﻿using FishSpotApi.Core.Repository;
+using FishSpotApi.Core.Services;
+using FishSpotApi.Data;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FishspotApi.Core
+namespace FishSpotApi.Core;
+
+public static class CoreDependency
 {
-    public static class CoreDependency
+    /// <summary>
+    /// Method to include the services of core lib into depency injection
+    /// </summary>
+    /// <param name="services">Extesion of IServiceCollection</param>
+    public static void AddCoreDependency(this IServiceCollection services)
     {
-        /// <summary>
-        /// Method to include the services of core lib into depency injection
-        /// </summary>
-        /// <param name="services">Extesion of IServiceCollection</param>
-        public static void AddCoreDependency(this IServiceCollection services)
-        {
-            services.AddDataDependency();
-            services.AddScoped<TokenRepository>();
-            services.AddScoped<UserRepository>();
-            services.AddScoped<RecoverPasswordRepository>();
-            services.AddScoped<SpotRepository>();
-            services.AddScoped<TokenService>();
-            services.AddScoped<UserService>();
-            services.AddScoped<MailService>();
-            services.AddScoped<SpotService>();
-        }
+        services.AddDataDependency();
+        services.AddScoped<TokenRepository>();
+        services.AddScoped<UserRepository>();
+        services.AddScoped<RecoverPasswordRepository>();
+        services.AddScoped<SpotRepository>();
+        services.AddScoped<TokenService>();
+        services.AddScoped<UserService>();
+        services.AddScoped<MailService>();
+        services.AddScoped<SpotService>();
     }
 }

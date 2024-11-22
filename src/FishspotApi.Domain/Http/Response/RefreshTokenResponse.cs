@@ -1,8 +1,7 @@
-﻿namespace FishspotApi.Domain.Http.Response
+﻿namespace FishSpotApi.Domain.Http.Response;
+
+public class RefreshTokenResponse
 {
-    public class RefreshTokenResponse
-    {
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
-    }
+    public string Token { get; set; }
+    public string RefreshToken { get; set; }
 }

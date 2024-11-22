@@ -1,173 +1,167 @@
-﻿using FishspotApi.Core.Repository;
-using FishspotApi.Core.Utils;
-using FishspotApi.Domain.Entity;
-using FishspotApi.Domain.Exception;
-using FishspotApi.Domain.Http.Request;
-using FishspotApi.Domain.Http.Response;
+﻿using FishSpotApi.Core.Repository;
+using FishSpotApi.Core.Utils;
+using FishSpotApi.Domain.Entity;
+using FishSpotApi.Domain.Exception;
+using FishSpotApi.Domain.Http.Request;
+using FishSpotApi.Domain.Http.Response;
 using System.Security.Claims;
 using System.Text;
 
-namespace FishspotApi.Core.Services
+namespace FishSpotApi.Core.Services;
+
+public class UserService(UserRepository userRepository, RecoverPasswordRepository recoverRepository, TokenService tokenService, MailService mailService)
 {
-    public class UserService(UserRepository user, RecoverPasswordRepository recover, TokenService token, MailService mail)
+    public UserResponse RegisterUser(UserRegisterRequest payload)
     {
-        private readonly RecoverPasswordRepository _recoverPassword = recover;
-        private readonly UserRepository _user = user;
-        private readonly TokenService _token = token;
-        private readonly MailService _mail = mail;
-
-        public UserResponse RegisterUser(UserRegisterRequest payload)
+        var user = userRepository.Insert(new UserEntity
         {
-            var user = _user.Insert(new UserEntity
-            {
-                Email = payload.Email,
-                Name = payload.Name,
-                Password = PasswordUtils.EncryptPassword(payload.Password),
-                UniqueIdentifierToken = Guid.NewGuid().ToString()
-            });
+            Email = payload.Email,
+            Name = payload.Name,
+            Password = PasswordUtils.EncryptPassword(payload.Password),
+            UniqueIdentifierToken = Guid.NewGuid().ToString()
+        });
 
-            return new UserResponse
-            {
-                Email = user.Email,
-                Name = user.Name,
-                Id = user.Id
-            };
+        return new UserResponse
+        {
+            Email = user.Email,
+            Name = user.Name,
+            Id = user.Id
+        };
+    }
+
+    public bool IsUniqueEmail(string email) => userRepository.GetByEmail(email).Any();
+
+    public UserLoginResponse LoginUser(UserLoginRequest payload)
+    {
+        var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
+
+        if (user is null)
+        {
+            throw new UserNotFoundException("User not found");
         }
 
-        public bool IsUniqueEmail(string email) => _user.GetByEmail(email).Any();
-
-        public UserLoginResponse LoginUser(UserLoginRequest payload)
+        if (!PasswordUtils.VerifyPassword(user.Password, payload.Password))
         {
-            var user = _user.GetByEmail(payload.Email).FirstOrDefault();
-
-            if (user is null)
-            {
-                throw new UserNotFoundException("User not found");
-            }
-
-            if (!PasswordUtils.VerifyPassword(user.Password, payload.Password))
-            {
-                throw new IncorrectPasswordException("Password is not correct");
-            }
-
-            var userRefreshToken = _token.GenerateRefreshToken();
-            var userToken = _token.GenerateToken(new List<Claim>()
-            {
-                new Claim("code", user.Id.ToString()),
-                new Claim("name", user.Name),
-                new Claim("login", user.Email),
-                new Claim("token", user.UniqueIdentifierToken),
-                new Claim(ClaimTypes.Role, "user"),
-            });
-
-            _token.DeleteRefreshToken(user.UniqueIdentifierToken);
-            _token.SaveRefreshToken(user.UniqueIdentifierToken, userRefreshToken, userToken);
-
-            return new UserLoginResponse
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Token = userToken,
-                RefreshToken = userRefreshToken
-            };
+            throw new IncorrectPasswordException("Password is not correct");
         }
 
-        public RefreshTokenResponse RefreshToken(RefreshTokenRequest payload)
+        var userRefreshToken = tokenService.GenerateRefreshToken();
+        var userToken = tokenService.GenerateToken(new List<Claim>()
         {
-            var claims = _token.GetPrincipalFromExpiredToken(payload.Token).Claims;
-            var claim = claims.FirstOrDefault((claim) => claim.Type == "token");
-            var value = claim.Value;
+            new Claim("code", user.Id.ToString()),
+            new Claim("name", user.Name),
+            new Claim("login", user.Email),
+            new Claim("token", user.UniqueIdentifierToken),
+            new Claim(ClaimTypes.Role, "user"),
+        });
 
-            var savedRefreshToken = _token.GetRefreshToken(value);
-            if (savedRefreshToken != payload.RefreshToken)
-            {
-                throw new RefreshTokenInvalidException("Invalid refresh token");
-            }
+        tokenService.DeleteRefreshToken(user.UniqueIdentifierToken);
+        tokenService.SaveRefreshToken(user.UniqueIdentifierToken, userRefreshToken, userToken);
 
-            var newJwtToken = _token.GenerateToken(claims);
-            var newRefreshToken = _token.GenerateRefreshToken();
+        return new UserLoginResponse
+        {
+            Name = user.Name,
+            Email = user.Email,
+            Token = userToken,
+            RefreshToken = userRefreshToken
+        };
+    }
 
-            _token.DeleteRefreshToken(value);
-            _token.SaveRefreshToken(value, newRefreshToken, newJwtToken);
+    public RefreshTokenResponse RefreshToken(RefreshTokenRequest payload)
+    {
+        var claims = tokenService.GetPrincipalFromExpiredToken(payload.Token).Claims;
+        var claim = claims.FirstOrDefault((claim) => claim.Type == "token");
+        var value = claim.Value;
 
-            return new RefreshTokenResponse
-            {
-                RefreshToken = newJwtToken,
-                Token = newRefreshToken
-            };
+        var savedRefreshToken = tokenService.GetRefreshToken(value);
+        if (savedRefreshToken != payload.RefreshToken)
+        {
+            throw new RefreshTokenInvalidException("Invalid refresh token");
         }
 
-        public void GenerateRecoverToken(RecoverPasswordRequest payload)
+        var newJwtToken = tokenService.GenerateToken(claims);
+        var newRefreshToken = tokenService.GenerateRefreshToken();
+
+        tokenService.DeleteRefreshToken(value);
+        tokenService.SaveRefreshToken(value, newRefreshToken, newJwtToken);
+
+        return new RefreshTokenResponse
         {
-            var user = _user.GetByEmail(payload.Email).FirstOrDefault();
+            RefreshToken = newJwtToken,
+            Token = newRefreshToken
+        };
+    }
 
-            if (user is null)
-            {
-                throw new UserNotFoundException("User not found");
-            }
+    public void GenerateRecoverToken(RecoverPasswordRequest payload)
+    {
+        var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
 
-            _mail.SendRecoverPasswordMail(user.Email, user.Name, GenerateToken(user.Email));
+        if (user is null)
+        {
+            throw new UserNotFoundException("User not found");
         }
 
-        public void ChangePassword(ChangePasswordRequest payload)
+        mailService.SendRecoverPasswordMail(user.Email, user.Name, GenerateToken(user.Email));
+    }
+
+    public void ChangePassword(ChangePasswordRequest payload)
+    {
+        var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
+
+        if (user is null)
         {
-            var user = _user.GetByEmail(payload.Email).FirstOrDefault();
-
-            if (user is null)
-            {
-                throw new UserNotFoundException("User not found");
-            }
-
-            if (VerifyToken(payload.Token, payload.Email))
-            {
-                throw new InvalidRecoverTokenException("The token is invalid");
-            }
-
-            user.Password = PasswordUtils.EncryptPassword(payload.NewPassword);
-
-            _user.Update(user);
+            throw new UserNotFoundException("User not found");
         }
 
-        private string GenerateToken(string email)
+        if (VerifyToken(payload.Token, payload.Email))
         {
-            var strBuilder = new StringBuilder();
-            var random = new Random();
-            char letter;
-
-            for (int i = 0; i < 5; i++)
-            {
-                int shift = Convert.ToInt32(Math.Floor(25 * random.NextDouble()));
-                letter = Convert.ToChar(shift + 65);
-                strBuilder.Append(letter);
-            }
-
-            _recoverPassword.Insert(new RecoverPasswordEntity
-            {
-                Email = email,
-                Token = strBuilder.ToString(),
-                ExpirationDate = DateTime.Now.AddDays(1)
-            });
-
-            return strBuilder.ToString();
+            throw new InvalidRecoverTokenException("The token is invalid");
         }
 
-        private bool VerifyToken(string token, string email)
+        user.Password = PasswordUtils.EncryptPassword(payload.NewPassword);
+
+        userRepository.Update(user);
+    }
+
+    private string GenerateToken(string email)
+    {
+        var strBuilder = new StringBuilder();
+        var random = new Random();
+        char letter;
+
+        for (int i = 0; i < 5; i++)
         {
-            var recoverToken = _recoverPassword.GetByTokenAndEmail(token, email);
-            var date = DateTime.Now;
-
-            if (recoverToken is null)
-            {
-                return false;
-            }
-
-            var isRecoverTokenValid =
-                recoverToken.ExpirationDate < date.AddMinutes(-5) &&
-                recoverToken.ExpirationDate > date.AddMinutes(5);
-
-            _recoverPassword.Delete(recoverToken.Id);
-
-            return isRecoverTokenValid;
+            int shift = Convert.ToInt32(Math.Floor(25 * random.NextDouble()));
+            letter = Convert.ToChar(shift + 65);
+            strBuilder.Append(letter);
         }
+
+        recoverRepository.Insert(new RecoverPasswordEntity
+        {
+            Email = email,
+            Token = strBuilder.ToString(),
+            ExpirationDate = DateTime.Now.AddDays(1)
+        });
+
+        return strBuilder.ToString();
+    }
+
+    private bool VerifyToken(string token, string email)
+    {
+        var recoverToken = recoverRepository.GetByTokenAndEmail(token, email);
+        var date = DateTime.Now;
+
+        if (recoverToken is null)
+        {
+            return false;
+        }
+
+        var isRecoverTokenValid =
+            recoverToken.ExpirationDate < date.AddMinutes(-5) &&
+            recoverToken.ExpirationDate > date.AddMinutes(5);
+
+        recoverRepository.Delete(recoverToken.Id);
+
+        return isRecoverTokenValid;
     }
 }

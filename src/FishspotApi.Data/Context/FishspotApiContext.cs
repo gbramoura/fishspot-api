@@ -1,20 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
-namespace FishspotApi.Data.Context
+namespace FishSpotApi.Data.Context;
+
+public class FishSpotApiContext
 {
-    public class FishspotApiContext
+    private readonly IMongoDatabase? _database;
+
+    public FishSpotApiContext(IConfiguration config)
     {
-        private readonly IMongoDatabase? _database;
-
-        public FishspotApiContext(IConfiguration config)
-        {
-            var dbConnection = config["MongoDB:ConnectionURI"];
-            var mongoUrl = MongoUrl.Create(dbConnection);
-            var mongoClient = new MongoClient(mongoUrl);
-            _database = mongoClient.GetDatabase(mongoUrl.DatabaseName);
-        }
-
-        public IMongoDatabase? Database => _database;
+        var dbConnection = config["MongoDB:ConnectionURI"];
+        var mongoUrl = MongoUrl.Create(dbConnection);
+        var mongoClient = new MongoClient(mongoUrl);
+        _database = mongoClient.GetDatabase(mongoUrl.DatabaseName);
     }
+
+    public IMongoDatabase? Database => _database;
 }

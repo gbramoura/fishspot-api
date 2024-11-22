@@ -1,11 +1,10 @@
-﻿namespace FishspotApi.Domain.Enum
+﻿namespace FishSpotApi.Domain.Enum;
+
+public enum SpotLocationRiskRate
 {
-    public enum SpotLocationRiskRate
-    {
-        VeryLow,
-        Low,
-        Medium,
-        High,
-        VeryHigh
-    }
+    VeryLow,
+    Low,
+    Medium,
+    High,
+    VeryHigh
 }

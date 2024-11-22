@@ -1,17 +1,16 @@
-﻿namespace FishspotApi.Domain.Exception
+﻿namespace FishSpotApi.Domain.Exception;
+
+public class UserNotFoundException : System.Exception
 {
-    public class UserNotFoundException : System.Exception
+    public UserNotFoundException()
     {
-        public UserNotFoundException()
-        {
-        }
+    }
 
-        public UserNotFoundException(string message) : base(message)
-        {
-        }
+    public UserNotFoundException(string message) : base(message)
+    {
+    }
 
-        public UserNotFoundException(string message, System.Exception inner) : base(message, inner)
-        {
-        }
+    public UserNotFoundException(string message, System.Exception inner) : base(message, inner)
+    {
     }
 }

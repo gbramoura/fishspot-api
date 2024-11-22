@@ -1,17 +1,15 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace FishspotApi.Domain.Entity
+namespace FishSpotApi.Domain.Entity;
+
+public class TokenEntity : BaseEntity
 {
-    public class TokenEntity : BaseEntity
-    {
-        [BsonElement("actor"), BsonRepresentation(BsonType.String)]
-        public string Actor { get; set; }
+    [BsonElement("actor")]
+    public string Actor { get; set; }
 
-        [BsonElement("refresh_token"), BsonRepresentation(BsonType.String)]
-        public string RefreshToken { get; set; }
+    [BsonElement("refresh_token")]
+    public string RefreshToken { get; set; }
 
-        [BsonElement("token"), BsonRepresentation(BsonType.String)]
-        public string Token { get; set; }
-    }
+    [BsonElement("token")]
+    public string Token { get; set; }
 }

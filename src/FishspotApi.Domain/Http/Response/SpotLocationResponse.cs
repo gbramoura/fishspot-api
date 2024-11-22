@@ -1,8 +1,7 @@
-﻿namespace FishspotApi.Domain.Http.Response
+﻿namespace FishSpotApi.Domain.Http.Response;
+
+public class SpotLocationResponse
 {
-    public class SpotLocationResponse
-    {
-        public string Id { get; set; }
-        public IEnumerable<double> Coordinates { get; set; }
-    }
+    public string Id { get; set; }
+    public IEnumerable<double> Coordinates { get; set; }
 }

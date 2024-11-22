@@ -1,14 +1,12 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace FishspotApi.Domain.Entity.Objects
+namespace FishSpotApi.Domain.Entity.Objects;
+
+public class SpotUser
 {
-    public class SpotUser
-    {
-        [BsonElement("id"), BsonRepresentation(BsonType.String)]
-        public string Id { get; set; }
+    [BsonElement("id")]
+    public string Id { get; set; }
 
-        [BsonElement("name"), BsonRepresentation(BsonType.String)]
-        public string Name { get; set; }
-    }
+    [BsonElement("name")]
+    public string Name { get; set; }
 }

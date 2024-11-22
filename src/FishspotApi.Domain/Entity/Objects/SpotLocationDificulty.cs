@@ -1,15 +1,13 @@
-﻿using FishspotApi.Domain.Enum;
-using MongoDB.Bson;
+﻿using FishSpotApi.Domain.Enum;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace FishspotApi.Domain.Entity
-{
-    public class SpotLocationDificulty
-    {
-        [BsonElement("rate"), BsonRepresentation(BsonType.Int32)]
-        public SpotLocationDificultyRate Rate { get; set; }
+namespace FishSpotApi.Domain.Entity;
 
-        [BsonElement("rate"), BsonRepresentation(BsonType.String)]
-        public string Observation { get; set; }
-    }
+public class SpotLocationDifficulty
+{
+    [BsonElement("rate")]
+    public SpotLocationDifficultyRate Rate { get; set; }
+
+    [BsonElement("observation")]
+    public string Observation { get; set; }
 }

@@ -1,17 +1,16 @@
-﻿namespace FishspotApi.Domain.Exception
+﻿namespace FishSpotApi.Domain.Exception;
+
+public class IncorrectPasswordException : System.Exception
 {
-    public class IncorrectPasswordException : System.Exception
+    public IncorrectPasswordException()
     {
-        public IncorrectPasswordException()
-        {
-        }
+    }
 
-        public IncorrectPasswordException(string message) : base(message)
-        {
-        }
+    public IncorrectPasswordException(string message) : base(message)
+    {
+    }
 
-        public IncorrectPasswordException(string message, System.Exception inner) : base(message, inner)
-        {
-        }
+    public IncorrectPasswordException(string message, System.Exception inner) : base(message, inner)
+    {
     }
 }

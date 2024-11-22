@@ -1,8 +1,7 @@
-﻿namespace FishspotApi.Domain.Projection
+﻿namespace FishSpotApi.Domain.Projection;
+
+public class SpotLocationProjection
 {
-    public class SpotLocationProjection
-    {
-        public string Id { get; set; }
-        public IEnumerable<double> Coordinates { get; set; }
-    }
+    public string Id { get; set; }
+    public IEnumerable<double> Coordinates { get; set; }
 }

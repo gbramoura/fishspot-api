@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FishspotApi.Data\FishspotApi.Data.csproj" />
-    <ProjectReference Include="..\FishspotApi.Domain\FishspotApi.Domain.csproj" />
+    <ProjectReference Include="..\FishSpotApi.Data\FishSpotApi.Data.csproj" />
+    <ProjectReference Include="..\FishSpotApi.Domain\FishSpotApi.Domain.csproj" />
   </ItemGroup>
 
 </Project>

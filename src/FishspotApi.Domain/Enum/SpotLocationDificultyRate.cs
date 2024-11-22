@@ -1,11 +1,10 @@
-﻿namespace FishspotApi.Domain.Enum
+﻿namespace FishSpotApi.Domain.Enum;
+
+public enum SpotLocationDifficultyRate
 {
-    public enum SpotLocationDificultyRate
-    {
-        VeryEasy,
-        Easy,
-        Medium,
-        Hard,
-        VeryHard
-    }
+    VeryEasy,
+    Easy,
+    Medium,
+    Hard,
+    VeryHard
 }

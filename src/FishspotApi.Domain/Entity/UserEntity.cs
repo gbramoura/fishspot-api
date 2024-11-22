@@ -1,20 +1,18 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace FishspotApi.Domain.Entity
+namespace FishSpotApi.Domain.Entity;
+
+public class UserEntity : BaseEntity
 {
-    public class UserEntity : BaseEntity
-    {
-        [BsonElement("name"), BsonRepresentation(BsonType.String)]
-        public string Name { get; set; }
+    [BsonElement("name")]
+    public string Name { get; set; }
 
-        [BsonElement("email"), BsonRepresentation(BsonType.String)]
-        public string Email { get; set; }
+    [BsonElement("email")]
+    public string Email { get; set; }
 
-        [BsonElement("password"), BsonRepresentation(BsonType.String)]
-        public string Password { get; set; }
+    [BsonElement("password")]
+    public string Password { get; set; }
 
-        [BsonElement("Unique_identifier_token"), BsonRepresentation(BsonType.String)]
-        public string UniqueIdentifierToken { get; set; }
-    }
+    [BsonElement("Unique_identifier_token")]
+    public string UniqueIdentifierToken { get; set; }
 }
