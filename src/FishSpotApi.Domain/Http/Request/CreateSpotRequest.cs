@@ -21,9 +21,6 @@ public class CreateSpotRequest
     
     public CreateSpotLocationRiskRequest LocationRisk { get; set; }
     
-    [MaxLength(10, ErrorMessage = "The limit of images must be 10 characters long")]
-    public IEnumerable<IFormFile> Images { get; set; }
-    
     [MinLength(1, ErrorMessage = "Minimum length of fishes required")]
     public IEnumerable<CreateSpotFishRequest> Fishes { get; set; }
 }

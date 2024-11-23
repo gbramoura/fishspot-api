@@ -10,7 +10,7 @@ public class SpotResponse
     public SpotRateResponse LocationDifficulty { get; set; }
     public SpotRateResponse LocationRisk { get; set; }
     public IEnumerable<string> Images { get; set; }
-    public IEnumerable<SpotFishResponse> Fishs { get; set; }
+    public IEnumerable<SpotFishResponse> Fishes { get; set; }
     public SpotUserResponse User { get; set; }
 }
 

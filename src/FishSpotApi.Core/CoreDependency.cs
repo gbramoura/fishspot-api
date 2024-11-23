@@ -23,5 +23,6 @@ public static class CoreDependency
         services.AddScoped<MailService>();
         services.AddScoped<SpotService>();
         services.AddScoped<FileService>();
+        services.AddScoped<ResourcesService>();
     }
 }

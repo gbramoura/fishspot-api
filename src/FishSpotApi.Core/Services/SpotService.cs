@@ -10,49 +10,54 @@ namespace FishSpotApi.Core.Services;
 
 public class SpotService(SpotRepository spotRepository, UserRepository userRepository, FileService fileService)
 {
-    public void CreateSpot(CreateSpotRequest createSpotRequest, string userId)
+    public SpotCreatedResponse CreateSpot(CreateSpotRequest createSpotRequest, string userId)
     {
         var user = userRepository.Get(userId);
         if (user is null)
         {
             throw new UserNotFoundException("User not found");
         }
-        
-        var savedImages = new List<string>();
-        if (createSpotRequest.Images.Any())
-        {
-            savedImages.AddRange(SaveSpotImages(createSpotRequest.Images));
-        }
 
-        spotRepository.Insert(new SpotEntity
+        var spotUser = new SpotUser()
         {
-            Images = savedImages,
+            Id = user.Id,
+            Name = user.Name
+        };
+        var risk = new SpotLocationRisk()
+        {
+            Rate = createSpotRequest.LocationRisk.Rate,
+            Observation = createSpotRequest.LocationRisk.Observation
+        };
+        var difficulty = new SpotLocationDifficulty()
+        {
+            Rate = createSpotRequest.LocationDifficulty.Rate,
+            Observation = createSpotRequest.LocationDifficulty.Observation
+        };
+        var fishes = createSpotRequest.Fishes.Select(fish => new SpotFish()
+        {
+            Name = fish.Name,
+            Weight = fish.Weight,
+            UnitMeasure = fish.UnitMeasure,
+            Lures = fish.Lures,
+        });
+        
+        var spot = spotRepository.Insert(new SpotEntity
+        {
+            Images = [],
+            User = spotUser,
+            Fishes = fishes,
+            LocationRisk = risk,
             Title = createSpotRequest.Title,
             Observation = createSpotRequest.Observation,
             Coordinates = createSpotRequest.Coordinates,
-            User = new SpotUser()
-            {
-                Id = user.Id,
-                Name = user.Name
-            },
-            Fishes = createSpotRequest.Fishes.Select(fish => new SpotFish()
-            {
-                Name = fish.Name,
-                Weight = fish.Weight,
-                UnitMeasure = fish.UnitMeasure,
-                Lures = fish.Lures,
-            }),
-            LocationDifficulty = new SpotLocationDifficulty()
-            {
-                Rate = createSpotRequest.LocationDifficulty.Rate,
-                Observation = createSpotRequest.LocationDifficulty.Observation
-            },
-            LocationRisk = new SpotLocationRisk()
-            {
-                Rate = createSpotRequest.LocationRisk.Rate,
-                Observation = createSpotRequest.LocationRisk.Observation
-            },
+            LocationDifficulty = difficulty,
         });
+
+        return new SpotCreatedResponse
+        {
+            Id = spot.Id,
+            Coordinates = spot.Coordinates,
+        };
     }
 
     public SpotResponse GetSpot(string id)
@@ -64,36 +69,38 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
             throw new SpotNotFoundException("Spot not found");
         }
 
-        var response = new SpotResponse()
+        var difficulty = new SpotRateResponse
+        {
+            Rate = spot.LocationRisk.Rate.ToString(),
+            Observation = spot.LocationRisk.Observation
+        };
+        var risk = new SpotRateResponse
+        {
+            Rate = spot.LocationDifficulty.Rate.ToString(),
+            Observation = spot.LocationDifficulty.Observation
+        };
+        var fishes = spot.Fishes.Select(fish => new SpotFishResponse
+        {
+            Name = fish.Name,
+            Weight = fish.Weight,
+            UnitMeasure = fish.UnitMeasure,
+            Lures = fish.Lures,
+        });
+
+        return new SpotResponse()
         {
             Title = spot.Title,
             Observation = spot.Observation,
             Coordinates = spot.Coordinates,
             Images = spot.Images,
+            LocationRisk = difficulty,
+            LocationDifficulty = risk,
+            Fishes = fishes,
             User = new SpotUserResponse()
             {
                 Name = spot.User.Name,
-            },
-            LocationRisk = new SpotRateResponse
-            {
-                Rate = spot.LocationRisk.Rate.ToString(),
-                Observation = spot.LocationRisk.Observation
-            },
-            LocationDifficulty = new SpotRateResponse
-            {
-                Rate = spot.LocationDifficulty.Rate.ToString(),
-                Observation = spot.LocationDifficulty.Observation
-            },
-            Fishs = spot.Fishes.Select(fish => new SpotFishResponse
-            {
-                Name = fish.Name,
-                Weight = fish.Weight,
-                UnitMeasure = fish.UnitMeasure,
-                Lures = fish.Lures,
-            })
+            }
         };
-
-        return response;
     }
 
     public IEnumerable<SpotLocationResponse> GetNearLocations()
@@ -135,30 +142,11 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
             throw new UserNotAuthorizedException("User is not authorized to delete spot");
         }
 
+        foreach (var spotImage in spot.Images)
+        {
+            fileService.DeleteFile(spotImage);
+        }
+        
         spotRepository.Delete(id);
     }
-
-    private IEnumerable<string> SaveSpotImages(IEnumerable<IFormFile> files)
-    {
-        var allowedFileExtensions = new String[] { ".jpg", ".jpeg", ".png" };
-        var savedFiles = new List<string>();
-        try
-        {
-            foreach (var file in files)
-            {
-                savedFiles.Add(fileService.SaveFile(file, allowedFileExtensions));
-            }
-
-            return savedFiles;
-        }
-        catch (Exception e)
-        {
-            foreach (var file in savedFiles)
-            {
-                fileService.DeleteFile(file);
-            }
-            throw new InvalidImageException("Unable to save files", e); 
-        }
-    }
-    
 }

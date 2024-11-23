@@ -28,7 +28,7 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
     
     public IEnumerable<SpotLocationProjection> GetUserLocations(string userId, int pageSize, int pageNumber)
     {
-        var filter = Builders<SpotEntity>.Filter.Eq(entity => entity.Id, userId);
+        var filter = Builders<SpotEntity>.Filter.Eq(entity => entity.User.Id, userId);
         var projection = Builders<SpotEntity>.Projection
             .Include(entity => entity.Coordinates);
 

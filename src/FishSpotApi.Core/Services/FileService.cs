@@ -13,7 +13,7 @@ public class FileService(IWebHostEnvironment environment)
             throw new ArgumentNullException(nameof(imageFile));
         }
 
-        var contentPath = environment.WebRootPath;
+        var contentPath = environment.ContentRootPath;
         var path = Path.Combine(contentPath, "Uploads");
 
         if (!Directory.Exists(path))
@@ -35,6 +35,27 @@ public class FileService(IWebHostEnvironment environment)
             return fileName;
         }
     }
+
+    public FileStream ReadFile(string fileName)
+    {
+        var filePath = Path.Combine(Environment.CurrentDirectory, "Uploads", fileName);
+        return new FileStream(filePath, FileMode.Open);
+    }
+
+    public bool Exists(string fileName)
+    {
+        var contentPath = environment.ContentRootPath;
+        var fileNameWithPath = Path.Combine(contentPath, "Uploads", fileName);
+        
+        return File.Exists(fileNameWithPath);
+    }
+
+    public string GetFileExtension(string fileName)
+    {
+        var contentPath = environment.ContentRootPath;
+        var fileNameWithPath = Path.Combine(contentPath, "Uploads", fileName);
+        return fileNameWithPath.Split('.').Last();
+    }
     
     public void DeleteFile(string fileName)
     {
@@ -43,8 +64,8 @@ public class FileService(IWebHostEnvironment environment)
             throw new ArgumentNullException(nameof(fileName));
         }
         
-        var contentPath = environment.WebRootPath;
-        var path = Path.Combine(contentPath, $"Uploads", fileName);
+        var contentPath = environment.ContentRootPath;
+        var path = Path.Combine(contentPath, "Uploads", fileName);
 
         if (!File.Exists(path))
         {

@@ -1,4 +1,3 @@
-using FishSpotApi.Core.Extension;
 using FishSpotApi.Core.Services;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http;
@@ -9,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace FishSpotApi.Application.Controllers;
 
 [ApiController]
-[Route("user")]
-public class UserController(SpotService spotService) : ControllerBase
+[Route("resources")]
+public class ResourcesController(ResourcesService resourcesService) : ControllerBase
 {
-    [HttpGet("/spot")]
+    [HttpGet("{id}")]
     [Authorize(Roles = "user")]
-    public ActionResult<DefaultResponse> GetUserLocations([FromBody] ListRequest listRequest)
+    public IActionResult GetResource(string id) 
     {
         var http = new DefaultResponse()
         {
@@ -24,57 +23,57 @@ public class UserController(SpotService spotService) : ControllerBase
 
         try
         {
-            var userid = User?.Identity?.GetUserId();
-            var locations = spotService.GetUserLocations(userid ?? string.Empty, listRequest);
-
-            http.Code = StatusCodes.Status200OK;
-            http.Message = "Locations find";
-            http.Response = locations;
+            var (resource, extension) = resourcesService.GetResource(id);
+            return File(resource, $"image/{extension}");
+        }
+        catch (ImageNotFoundException e)
+        {
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (Exception e)
+        catch (Exception err)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
-            http.Error = e.Message;
+            http.Message = "Internal Server Error";
+            http.Error = err.Message;
             return StatusCode(http.Code, http);
         }
-    } 
+    }
     
-    [HttpDelete("/spot/{id}")]
+    [HttpPost("/attach-to-spot")]
     [Authorize(Roles = "user")]
-    public ActionResult<DefaultResponse> DeleteSpot([FromQuery] string id)
+    public ActionResult<DefaultResponse> AttachResourcesToSpot([FromForm] AttachResourcesToSpotRequest request)
     {
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
             Message = "Don't authorized"
         };
-
+        
         try
         {
-            var userId = User?.Identity?.GetUserId();
-            spotService.DeleteSpot(id, userId ?? string.Empty);
-
+            var resources = resourcesService.AttachSpotResources(request);
+                
+            http.Message = "The resources were attached to a spot";
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Spot deleted successfully";
-            return StatusCode(http.Code, http);
+            http.Response = resources;
+            return http;
         }
         catch (SpotNotFoundException e)
         {
             http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (UserNotAuthorizedException e)
+        catch (InvalidImageException e)
         {
             http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (Exception e)
+        catch (Exception err)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
-            http.Error = e.Message;
+            http.Message = "Internal Server Error";
+            http.Error = err.Message;
             return StatusCode(http.Code, http);
         }
     }
