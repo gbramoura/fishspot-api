@@ -48,7 +48,7 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var userRefreshToken = tokenService.GenerateRefreshToken();
         var userToken = tokenService.GenerateToken(new List<Claim>()
         {
-            new Claim("code", user.Id.ToString()),
+            new Claim("id", user.Id),
             new Claim("name", user.Name),
             new Claim("login", user.Email),
             new Claim("token", user.UniqueIdentifierToken),

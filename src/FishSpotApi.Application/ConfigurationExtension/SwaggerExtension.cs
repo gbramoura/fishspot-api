@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
-namespace FishSpotApi.Application.Extension;
+namespace FishSpotApi.Application.ConfigurationExtension;
 
 public static class SwaggerExtension
 {

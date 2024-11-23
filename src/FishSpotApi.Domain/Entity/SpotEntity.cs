@@ -12,7 +12,7 @@ public class SpotEntity : BaseEntity
     public string Observation { get; set; }
 
     [BsonElement("coordinates")]
-    public double[] Coordinates { get; set; }
+    public IEnumerable<double> Coordinates { get; set; }
 
     [BsonElement("location_difficulty")]
     public SpotLocationDifficulty LocationDifficulty { get; set; }
@@ -23,8 +23,8 @@ public class SpotEntity : BaseEntity
     [BsonElement("images")]
     public IEnumerable<string> Images { get; set; }
 
-    [BsonElement("fishs")]
-    public IEnumerable<SpotFish> Fishs { get; set; }
+    [BsonElement("fishes")]
+    public required IEnumerable<SpotFish> Fishes { get; set; }
 
     [BsonElement("user")]
     public SpotUser User { get; set; }

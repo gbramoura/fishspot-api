@@ -1,22 +1,58 @@
 ﻿using FishSpotApi.Core.Repository;
+using FishSpotApi.Domain.Entity;
+using FishSpotApi.Domain.Entity.Objects;
 using FishSpotApi.Domain.Exception;
+using FishSpotApi.Domain.Http.Request;
 using FishSpotApi.Domain.Http.Response;
+using Microsoft.AspNetCore.Http;
 
 namespace FishSpotApi.Core.Services;
 
-public class SpotService(SpotRepository spotRepository)
+public class SpotService(SpotRepository spotRepository, UserRepository userRepository, FileService fileService)
 {
-    public IEnumerable<SpotLocationResponse> GetNearLocations()
+    public void CreateSpot(CreateSpotRequest createSpotRequest, string userId)
     {
-        // TODO: include the near location
-        var locations = spotRepository.GetLocations();
-        var response = locations.Select(location => new SpotLocationResponse
+        var user = userRepository.Get(userId);
+        if (user is null)
         {
-            Id = location.Id,
-            Coordinates = location.Coordinates
-        });
+            throw new UserNotFoundException("User not found");
+        }
+        
+        var savedImages = new List<string>();
+        if (createSpotRequest.Images.Any())
+        {
+            savedImages.AddRange(SaveSpotImages(createSpotRequest.Images));
+        }
 
-        return response;
+        spotRepository.Insert(new SpotEntity
+        {
+            Images = savedImages,
+            Title = createSpotRequest.Title,
+            Observation = createSpotRequest.Observation,
+            Coordinates = createSpotRequest.Coordinates,
+            User = new SpotUser()
+            {
+                Id = user.Id,
+                Name = user.Name
+            },
+            Fishes = createSpotRequest.Fishes.Select(fish => new SpotFish()
+            {
+                Name = fish.Name,
+                Weight = fish.Weight,
+                UnitMeasure = fish.UnitMeasure,
+                Lures = fish.Lures,
+            }),
+            LocationDifficulty = new SpotLocationDifficulty()
+            {
+                Rate = createSpotRequest.LocationDifficulty.Rate,
+                Observation = createSpotRequest.LocationDifficulty.Observation
+            },
+            LocationRisk = new SpotLocationRisk()
+            {
+                Rate = createSpotRequest.LocationRisk.Rate,
+                Observation = createSpotRequest.LocationRisk.Observation
+            },
+        });
     }
 
     public SpotResponse GetSpot(string id)
@@ -48,7 +84,7 @@ public class SpotService(SpotRepository spotRepository)
                 Rate = spot.LocationDifficulty.Rate.ToString(),
                 Observation = spot.LocationDifficulty.Observation
             },
-            Fishs = spot.Fishs.Select(fish => new SpotFishResponse
+            Fishs = spot.Fishes.Select(fish => new SpotFishResponse
             {
                 Name = fish.Name,
                 Weight = fish.Weight,
@@ -60,7 +96,7 @@ public class SpotService(SpotRepository spotRepository)
         return response;
     }
 
-    public void DeleteSpot(string id)
+    public void DeleteSpot(string id, string userId)
     {
         var spot = spotRepository.Get(id);
 
@@ -69,6 +105,48 @@ public class SpotService(SpotRepository spotRepository)
             throw new SpotNotFoundException("Spot not found");
         }
 
+        if (userId != spot.User.Id)
+        {
+            throw new UserNotAuthorizedException("User is not authorized to delete spot");
+        }
+
         spotRepository.Delete(id);
     }
+    
+    public IEnumerable<SpotLocationResponse> GetNearLocations()
+    {
+        // TODO: include the near location
+        var locations = spotRepository.GetLocations();
+        var response = locations.Select(location => new SpotLocationResponse
+        {
+            Id = location.Id,
+            Coordinates = location.Coordinates
+        });
+
+        return response;
+    }
+
+    private IEnumerable<string> SaveSpotImages(IEnumerable<IFormFile> files)
+    {
+        var allowedFileExtensions = new String[] { ".jpg", ".jpeg", ".png" };
+        var savedFiles = new List<string>();
+        try
+        {
+            foreach (var file in files)
+            {
+                savedFiles.Add(fileService.SaveFile(file, allowedFileExtensions));
+            }
+
+            return savedFiles;
+        }
+        catch (Exception e)
+        {
+            foreach (var file in savedFiles)
+            {
+                fileService.DeleteFile(file);
+            }
+            throw new InvalidImageException("Unable to save files", e); 
+        }
+    }
+    
 }

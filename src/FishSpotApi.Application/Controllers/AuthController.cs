@@ -35,11 +35,11 @@ public class AuthController(UserService userService) : ControllerBase
             http.Message = "User registered successfully";
             return StatusCode(http.Code, http);
         }
-        catch (Exception E)
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal server error";
-            http.Error = E.Message;
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
@@ -85,7 +85,7 @@ public class AuthController(UserService userService) : ControllerBase
 
     [HttpPost("refresh-token/")]
     [AllowAnonymous]
-    public ActionResult<DefaultResponse> AtualizarToken([FromBody] RefreshTokenRequest body)
+    public ActionResult<DefaultResponse> RefreshToken([FromBody] RefreshTokenRequest body)
     {
         var http = new DefaultResponse()
         {

@@ -22,5 +22,6 @@ public static class CoreDependency
         services.AddScoped<UserService>();
         services.AddScoped<MailService>();
         services.AddScoped<SpotService>();
+        services.AddScoped<FileService>();
     }
 }

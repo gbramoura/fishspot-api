@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using FishSpotApi.Domain.Enum;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace FishSpotApi.Domain.Entity;
 
@@ -11,7 +12,7 @@ public class SpotFish
     public double Weight { get; set; }
 
     [BsonElement("unit_measure")]
-    public string UnitMeasure { get; set; }
+    public UnitMeasureType UnitMeasure { get; set; }
 
     [BsonElement("lures")]
     public IEnumerable<string> Lures { get; set; }

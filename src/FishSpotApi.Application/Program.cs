@@ -1,10 +1,9 @@
-using FishSpotApi.Application.Extension;
 using FishSpotApi.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
 using System.Text;
 using System.Text.Json.Serialization;
+using FishSpotApi.Application.ConfigurationExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +33,13 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddSwaggerGenWithAuth();
+builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        });
+    });
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -42,10 +48,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

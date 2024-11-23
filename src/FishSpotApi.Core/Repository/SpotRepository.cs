@@ -19,7 +19,7 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
             .ToEnumerable()
             .Select(entity => new SpotLocationProjection
             {
-                Id = entity.GetValue("_id").AsString,
+                Id = entity.GetValue("_id").AsObjectId.ToString(),
                 Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble)
             });
 

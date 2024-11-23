@@ -1,4 +1,5 @@
-﻿using FishSpotApi.Core.Services;
+﻿using FishSpotApi.Core.Extension;
+using FishSpotApi.Core.Services;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http;
 using FishSpotApi.Domain.Http.Request;
@@ -23,17 +24,28 @@ public class SpotController(SpotService spotService) : ControllerBase
 
         try
         {
-            // TODO: Register the spot
+            var userid = User?.Identity?.GetUserId();
+            spotService.CreateSpot(createSpotRequest, userid ?? string.Empty);
 
             http.Code = StatusCodes.Status201Created;
             http.Message = "Spot registered successfully";
             return StatusCode(http.Code, http);
         }
-        catch (Exception E)
+        catch (UserNotFoundException e)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (InvalidImageException e)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal server error";
-            http.Error = E.Message;
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
@@ -62,11 +74,11 @@ public class SpotController(SpotService spotService) : ControllerBase
             http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (Exception E)
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal server error";
-            http.Error = E.Message;
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
@@ -91,11 +103,11 @@ public class SpotController(SpotService spotService) : ControllerBase
             http.Response = locations;
             return StatusCode(http.Code, http);
         }
-        catch (Exception E)
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal server error";
-            http.Error = E.Message;
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
@@ -112,7 +124,8 @@ public class SpotController(SpotService spotService) : ControllerBase
 
         try
         {
-            spotService.DeleteSpot(id);
+            var userId = User?.Identity?.GetUserId();
+            spotService.DeleteSpot(id, userId ?? string.Empty);
 
             http.Code = StatusCodes.Status200OK;
             http.Message = "Spot deleted successfully";
@@ -123,11 +136,16 @@ public class SpotController(SpotService spotService) : ControllerBase
             http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (Exception E)
+        catch (UserNotAuthorizedException e)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal server error";
-            http.Error = E.Message;
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }

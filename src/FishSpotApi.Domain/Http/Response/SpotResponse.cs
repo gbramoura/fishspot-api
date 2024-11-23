@@ -1,4 +1,6 @@
-﻿namespace FishSpotApi.Domain.Http.Response;
+﻿using FishSpotApi.Domain.Enum;
+
+namespace FishSpotApi.Domain.Http.Response;
 
 public class SpotResponse
 {
@@ -26,7 +28,7 @@ public class SpotRateResponse
 public class SpotFishResponse
 {
     public string Name { get; set; }
-    public string UnitMeasure { get; set; }
     public double Weight { get; set; }
+    public UnitMeasureType UnitMeasure { get; set; }
     public IEnumerable<string> Lures { get; set; }
 }

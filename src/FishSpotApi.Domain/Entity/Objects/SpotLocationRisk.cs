@@ -6,7 +6,7 @@ namespace FishSpotApi.Domain.Entity;
 public class SpotLocationRisk
 {
     [BsonElement("rate")]
-    public SpotLocationDifficultyRate Rate { get; set; }
+    public SpotLocationRiskRate Rate { get; set; }
 
     [BsonElement("observation")]
     public string Observation { get; set; }
