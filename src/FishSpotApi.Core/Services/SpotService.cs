@@ -96,6 +96,31 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         return response;
     }
 
+    public IEnumerable<SpotLocationResponse> GetNearLocations()
+    {
+        // TODO: include the near location
+        var locations = spotRepository.GetLocations();
+        var response = locations.Select(location => new SpotLocationResponse
+        {
+            Id = location.Id,
+            Coordinates = location.Coordinates
+        });
+
+        return response;
+    }
+    
+    public IEnumerable<SpotLocationResponse> GetUserLocations(string userId, ListRequest listRequest)
+    {
+        var locations = spotRepository.GetUserLocations(userId, listRequest.PageSize, listRequest.PageNumber);
+        var response = locations.Select(location => new SpotLocationResponse
+        {
+            Id = location.Id,
+            Coordinates = location.Coordinates
+        });
+
+        return response;
+    }
+    
     public void DeleteSpot(string id, string userId)
     {
         var spot = spotRepository.Get(id);
@@ -111,19 +136,6 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         }
 
         spotRepository.Delete(id);
-    }
-    
-    public IEnumerable<SpotLocationResponse> GetNearLocations()
-    {
-        // TODO: include the near location
-        var locations = spotRepository.GetLocations();
-        var response = locations.Select(location => new SpotLocationResponse
-        {
-            Id = location.Id,
-            Coordinates = location.Coordinates
-        });
-
-        return response;
     }
 
     private IEnumerable<string> SaveSpotImages(IEnumerable<IFormFile> files)

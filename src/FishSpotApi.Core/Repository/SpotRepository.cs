@@ -25,4 +25,24 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
 
         return locations;
     }
+    
+    public IEnumerable<SpotLocationProjection> GetUserLocations(string userId, int pageSize, int pageNumber)
+    {
+        var filter = Builders<SpotEntity>.Filter.Eq(entity => entity.Id, userId);
+        var projection = Builders<SpotEntity>.Projection
+            .Include(entity => entity.Coordinates);
+
+        var locations = _db.Find(filter)
+            .Skip((pageNumber-1) * pageSize)
+            .Limit(pageSize)
+            .Project(projection)
+            .ToEnumerable()
+            .Select(entity => new SpotLocationProjection
+            {
+                Id = entity.GetValue("_id").AsObjectId.ToString(),
+                Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble)
+            });
+
+        return locations;
+    }
 }

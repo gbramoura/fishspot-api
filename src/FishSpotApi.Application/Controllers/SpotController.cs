@@ -110,43 +110,5 @@ public class SpotController(SpotService spotService) : ControllerBase
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
-    }
-
-    [HttpDelete("{id}")]
-    [Authorize(Roles = "user")]
-    public ActionResult<DefaultResponse> DeleteSpot([FromQuery] string id)
-    {
-        var http = new DefaultResponse()
-        {
-            Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
-        };
-
-        try
-        {
-            var userId = User?.Identity?.GetUserId();
-            spotService.DeleteSpot(id, userId ?? string.Empty);
-
-            http.Code = StatusCodes.Status200OK;
-            http.Message = "Spot deleted successfully";
-            return StatusCode(http.Code, http);
-        }
-        catch (SpotNotFoundException e)
-        {
-            http.Message = e.Message;
-            return StatusCode(http.Code, http);
-        }
-        catch (UserNotAuthorizedException e)
-        {
-            http.Message = e.Message;
-            return StatusCode(http.Code, http);
-        }
-        catch (Exception e)
-        {
-            http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
-            http.Error = e.Message;
-            return StatusCode(http.Code, http);
-        }
-    }
+    } 
 }
