@@ -15,20 +15,19 @@ The **FishSpot API** allows developers to create applications where users can re
 * User Authentication
 * Location-Based Search
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 * .NET SDK installed on your machine
-* A valid API key (sign up at FishSpot API Portal to get your key)
-* Basic knowledge of C# and RESTful API principles
+* Intermediary knowledge of C# and RESTful API principles
+* MongoDB installed on your machine or a container
+* Basic knowledge of MongoDB
 
 ## Installation
 
 * **1. Clone the repository:**
 
 ```bash
-git clone https://github.com/gbrmoura/fishspot-api.git
+git clone https://github.com/gbramoura/fishspot-api.git
 cd fishspot-api
 ```
 
@@ -48,18 +47,12 @@ The API will be available at http://localhost:5000.
 
 ## API Endpoints
 
-# AuthController API Endpoints
-
-This document provides details for the AuthController API that handles user authentication operations such as registration, login, password recovery, and token refresh.
-
-## API Endpoints
-
 ### Auth Endpoint
 
 | **Endpoint** | **Method** | **Description** | **Request Body**  | 
 |---------|------------|--------------------|----------------------|
 | `auth/register/`         | POST  | Registers a new user.                                                 | `{ "email": "user@example.com", "password": "securepassword123", "name": "John Doe" }`    | 
-| `auth/login/`            | POST  | Login a user.                                                       | `{ "email": "user@example.com", "password": "securepassword123" }`                        | 
+| `auth/login/`            | POST  | Login a user.                                                         | `{ "email": "user@example.com", "password": "securepassword123" }`                        | 
 | `auth/refresh-token/`    | POST  | Refreshes the authentication token using a valid refresh token.       | `{ "refreshToken": "EXPIRED_REFRESH_TOKEN" }`                                             | 
 | `auth/recover-password/` | POST  | Sends a password recovery token to the user's email.                  | `{ "email": "user@example.com" }`                                                         | 
 | `auth/change-password/`  | POST  | Changes the user's password using a recovery token.                   | `{ "token": "VALID_RECOVERY_TOKEN", "newPassword": "newSecurePassword123" }`              | 
@@ -68,7 +61,7 @@ This document provides details for the AuthController API that handles user auth
 
 | **Endpoint** | **Method** | **Description**  | **Request Body** |
 |--------------|------------|------------------|-------------------|
-| `spot/`                            | POST       | Creates a new spot.                                             | `{ "name": "Spot Name", "location": "Latitude,Longitude", "description": "Spot Description" }` | 
+| `spot/`                            | POST       | Creates a new spot.                                             | `{ "id": "Spot Name", "location": [Latitude, Longitude], ... }`        | 
 | `spot/{id}`                        | GET        | Retrieves a specific spot by its ID.                            | N/A                                                                    | 
 | `spot/`                            | GET        | Retrieves a list of nearby locations.                           | N/A                                                                    | 
 | `spot/by-user`                     | GET        | Retrieves spots associated with the authenticated user.         | `{ "page": 1, "size": 10 }`                                            | 
@@ -78,12 +71,12 @@ This document provides details for the AuthController API that handles user auth
 
 | **Endpoint**                       | **Method** | **Description**                                                         | **Request Body**                                                        |
 |------------------------------------|------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| `resources/{id}`                  | GET        | Retrieves a resource (e.g., image) by its ID.                           | N/A                                                                     |
-| `resources/attach-to-spot`        | POST       | Attaches resources to a spot.                                           | `{ "spotId": "123", "resourceFiles": [file1, file2], "description": "Resource description" }` |
-
+| `resources/{id}`                   | GET        | Retrieves a resource (e.g., image) by its ID.                           | N/A                                                                     |
+| `resources/attach-to-spot`         | POST       | Attaches resources to a spot.                                           | `{ "spotId": "123", "files": [file1, file2] }` |
+| `resources/dettach-to-spot`        | POST       | Detaches resources from a spot.                                         | `{ "spotId": "123", "files": [file1, file2] }` |
 
 ### Default Response
-All endpoints follow the same structure for responses. Here's an example of an response:
+All endpoints follow the same structure for responses. Here's an example of response:
 
 ```json
 {
