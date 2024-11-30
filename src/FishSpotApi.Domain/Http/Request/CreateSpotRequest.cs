@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace FishSpotApi.Domain.Http.Request;
 
+public class UpdateSpotRequest : CreateSpotRequest;
+
 public class CreateSpotRequest
 {
     [Required(ErrorMessage = "The title must be filled")]

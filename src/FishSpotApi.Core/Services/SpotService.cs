@@ -127,6 +127,50 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
 
         return response;
     }
+
+    public void UpdateSpot(string spotId, UpdateSpotRequest updateSpotRequest, string userId)
+    {
+        var spot = spotRepository.Get(spotId);
+        if (spot is null)
+        {
+            throw new SpotNotFoundException("Spot not found");
+        }
+
+        if (userId != spot.User.Id)
+        {
+            throw new UserNotAuthorizedException("User is not authorized to update spot");
+        }
+        
+        var risk = new SpotLocationRisk()
+        {
+            Rate = updateSpotRequest.LocationRisk.Rate,
+            Observation = updateSpotRequest.LocationRisk.Observation
+        };
+        var difficulty = new SpotLocationDifficulty()
+        {
+            Rate = updateSpotRequest.LocationDifficulty.Rate,
+            Observation = updateSpotRequest.LocationDifficulty.Observation
+        };
+        var fishes = updateSpotRequest.Fishes.Select(fish => new SpotFish()
+        {
+            Name = fish.Name,
+            Weight = fish.Weight,
+            UnitMeasure = fish.UnitMeasure,
+            Lures = fish.Lures,
+        });
+        
+        spotRepository.Update(new SpotEntity
+        {
+            Images = [],
+            User = spot.User,
+            Fishes = fishes,
+            LocationRisk = risk,
+            LocationDifficulty = difficulty,
+            Title = updateSpotRequest.Title,
+            Observation = updateSpotRequest.Observation,
+            Coordinates = updateSpotRequest.Coordinates,
+        });
+    }
     
     public void DeleteSpot(string id, string userId)
     {

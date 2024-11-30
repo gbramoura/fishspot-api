@@ -26,11 +26,11 @@ public abstract class BaseRepository<T>(FishSpotApiContext mongo, string collect
         return genericEntity;
     }
 
-    public T Update(T token)
+    public T Update(T payload)
     {
-        var filter = Builders<T>.Filter.Eq(entity => entity.Id, token.Id);
-        _db?.ReplaceOne(filter, token);
-        return token;
+        var filter = Builders<T>.Filter.Eq(entity => entity.Id, payload.Id);
+        _db?.ReplaceOne(filter, payload);
+        return payload;
     }
 
     public void Delete(string id)
