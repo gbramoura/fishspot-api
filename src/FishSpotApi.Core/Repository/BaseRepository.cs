@@ -8,9 +8,9 @@ public abstract class BaseRepository<T>(FishSpotApiContext mongo, string collect
 {
     protected readonly IMongoCollection<T>? _db = mongo.Database?.GetCollection<T>(collection);
 
-    public IEnumerable<T> Get()
+    public List<T> Get()
     {
-        return _db.Find(FilterDefinition<T>.Empty).ToEnumerable();
+        return _db.Find(FilterDefinition<T>.Empty).ToList();
     }
 
     public T Get(string id)

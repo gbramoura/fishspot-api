@@ -7,7 +7,7 @@ namespace FishSpotApi.Core.Repository;
 
 public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntity>(mongo, "spot")
 {
-    public IEnumerable<SpotLocationProjection> GetLocations()
+    public List<SpotLocationProjection> GetLocations()
     {
         // TODO: Make a huge filter about the location near to the x and y provided
         var filter = Builders<SpotEntity>.Filter.Empty;
@@ -16,17 +16,18 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
 
         var locations = _db.Find(filter)
             .Project(projection)
-            .ToEnumerable()
+            .ToList()
             .Select(entity => new SpotLocationProjection
             {
                 Id = entity.GetValue("_id").AsObjectId.ToString(),
-                Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble)
-            });
+                Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble).ToList()
+            })
+            .ToList();
 
         return locations;
     }
     
-    public IEnumerable<SpotLocationProjection> GetUserLocations(string userId, int pageSize, int pageNumber)
+    public List<SpotLocationProjection> GetUserLocations(string userId, int pageSize, int pageNumber)
     {
         var filter = Builders<SpotEntity>.Filter.Eq(entity => entity.User.Id, userId);
         var projection = Builders<SpotEntity>.Projection
@@ -40,8 +41,9 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
             .Select(entity => new SpotLocationProjection
             {
                 Id = entity.GetValue("_id").AsObjectId.ToString(),
-                Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble)
-            });
+                Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble).ToList()
+            })
+            .ToList();
 
         return locations;
     }

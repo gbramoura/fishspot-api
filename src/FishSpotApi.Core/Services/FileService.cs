@@ -5,16 +5,21 @@ namespace FishSpotApi.Core.Services;
 
 public class FileService(IWebHostEnvironment environment)
 {
-
-    public string SaveFile(IFormFile imageFile, string[] allowedFileExtensions)
+    private readonly string _contentPath = environment.ContentRootPath;
+    private readonly string _uploadPath = "Uploads";
+    
+    public string GetFileExtension(string fileName) => Path.Combine(_contentPath, _uploadPath, fileName).Split('.').Last();
+    
+    public bool Exists(string fileName) =>  File.Exists(Path.Combine(_contentPath, _uploadPath, fileName));
+    
+    public string SaveFile(IFormFile imageFile, List<string> allowedFileExtensions)
     {
         if (imageFile == null)
         {
             throw new ArgumentNullException(nameof(imageFile));
         }
-
-        var contentPath = environment.ContentRootPath;
-        var path = Path.Combine(contentPath, "Uploads");
+        
+        var path = Path.Combine(_contentPath, _uploadPath);
 
         if (!Directory.Exists(path))
         {
@@ -35,44 +40,24 @@ public class FileService(IWebHostEnvironment environment)
             return fileName;
         }
     }
-
+    
     public FileStream ReadFile(string fileName)
     {
-        var filePath = Path.Combine(Environment.CurrentDirectory, "Uploads", fileName);
-        return new FileStream(filePath, FileMode.Open);
-    }
-
-    public bool Exists(string fileName)
-    {
-        var contentPath = environment.ContentRootPath;
-        var fileNameWithPath = Path.Combine(contentPath, "Uploads", fileName);
-        
-        return File.Exists(fileNameWithPath);
-    }
-
-    public string GetFileExtension(string fileName)
-    {
-        var contentPath = environment.ContentRootPath;
-        var fileNameWithPath = Path.Combine(contentPath, "Uploads", fileName);
-        return fileNameWithPath.Split('.').Last();
+        if (!Exists(fileName))
+        {
+            throw new FileNotFoundException($"file {fileName} not found");
+        }
+        return new FileStream(Path.Combine(_contentPath, _uploadPath, fileName), FileMode.Open);
     }
     
     public void DeleteFile(string fileName)
     {
-        if (string.IsNullOrEmpty(fileName))
+        if (!Exists(fileName))
         {
-            throw new ArgumentNullException(nameof(fileName));
+            throw new FileNotFoundException($"file {fileName} not found");
         }
-        
-        var contentPath = environment.ContentRootPath;
-        var path = Path.Combine(contentPath, "Uploads", fileName);
-
-        if (!File.Exists(path))
-        {
-            throw new FileNotFoundException($"Invalid file path");
-        }
-        
-        File.Delete(path);
+        File.Delete(Path.Combine(_contentPath, _uploadPath, fileName));
     }
 
+    
 }

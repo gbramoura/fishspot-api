@@ -3,5 +3,5 @@
 public class SpotLocationProjection
 {
     public string Id { get; set; }
-    public IEnumerable<double> Coordinates { get; set; }
+    public List<double> Coordinates { get; set; }
 }

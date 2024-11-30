@@ -11,22 +11,15 @@ namespace FishSpotApi.Core.Services;
 
 public class UserService(UserRepository userRepository, RecoverPasswordRepository recoverRepository, TokenService tokenService, MailService mailService)
 {
-    public UserResponse RegisterUser(UserRegisterRequest payload)
+    public void RegisterUser(UserRegisterRequest payload)
     {
-        var user = userRepository.Insert(new UserEntity
+        userRepository.Insert(new UserEntity
         {
             Email = payload.Email,
             Name = payload.Name,
             Password = PasswordUtils.EncryptPassword(payload.Password),
             UniqueIdentifierToken = Guid.NewGuid().ToString()
         });
-
-        return new UserResponse
-        {
-            Email = user.Email,
-            Name = user.Name,
-            Id = user.Id
-        };
     }
 
     public bool IsUniqueEmail(string email) => userRepository.GetByEmail(email).Any();
@@ -34,7 +27,6 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
     public UserLoginResponse LoginUser(UserLoginRequest payload)
     {
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
-
         if (user is null)
         {
             throw new UserNotFoundException("User not found");

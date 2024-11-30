@@ -1,26 +1,24 @@
 using FishSpotApi.Core.Repository;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http.Request;
-using Microsoft.AspNetCore.Http;
 
 namespace FishSpotApi.Core.Services;
 
 public class ResourcesService(SpotRepository spotRepository, FileService fileService)
 {
+    private readonly List<string> _allowedFileExtensions = [".jpg", ".jpeg", ".png"];
+    
     public (FileStream resource, string Extesion) GetResource(string fileName)
     {
         if (!fileService.Exists(fileName))
         {
             throw new ImageNotFoundException("Resource not found");
         }
-            
-        var file = fileService.ReadFile(fileName);
-        var extension = fileService.GetFileExtension(fileName);
-            
-        return (resource: file, extension);
+        
+        return (resource: fileService.ReadFile(fileName), fileService.GetFileExtension(fileName));
     }
     
-    public IEnumerable<string> AttachSpotResources(AttachResourcesToSpotRequest attachRequest)
+    public List<string> AttachSpotResources(AttachResourcesToSpotRequest attachRequest)
     {
         var spot = spotRepository.Get(attachRequest.SpotId);
         if (spot is null)
@@ -28,31 +26,25 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
             throw new SpotNotFoundException("Spot not found");
         }
 
-        var allowedFileExtensions = new [] { ".jpg", ".jpeg", ".png" };
         var savedFiles = new List<string>();
         try
         {
-            foreach (var file in attachRequest.Files)
+            attachRequest.Files.ToList().ForEach(file =>
             {
-                var savedFile = fileService.SaveFile(file, allowedFileExtensions);
-                savedFiles.Add(savedFile);
-                spot.Images = spot.Images.Append(savedFile);
-            }
+                savedFiles.Add(fileService.SaveFile(file, _allowedFileExtensions));
+            });
+
+            spot.Images.AddRange(savedFiles);
             spotRepository.Update(spot);
             return savedFiles;
         }
         catch (Exception e)
         {
-            foreach (var file in savedFiles)
-            {
-                fileService.DeleteFile(file);
-            }
-            
+            savedFiles.ForEach(fileService.DeleteFile);
             throw new InvalidImageException("Unable to save files", e); 
         }
     }
-
-
+    
     public void DetachSpotResources(DetachResourcesFromSpotRequest detachRequest)
     {
         var spot = spotRepository.Get(detachRequest.SpotId);
@@ -69,11 +61,11 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
         var deletedFiles = new List<string>();
         try
         {
-            foreach (var file in detachRequest.Files)
+            detachRequest.Files.ToList().ForEach(file =>
             {
                 fileService.DeleteFile(file);
                 deletedFiles.Add(file);
-            }
+            });
         }
         catch (Exception e)
         {
@@ -81,9 +73,8 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
         }
         finally
         {
-            spot.Images = spot.Images.Where(img => deletedFiles.Contains(img));
+            spot.Images = spot.Images.Where(img => !deletedFiles.Contains(img)).ToList();
             spotRepository.Update(spot);
         }
-        
     }
 }

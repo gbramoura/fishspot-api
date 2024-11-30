@@ -6,11 +6,11 @@ public class SpotResponse
 {
     public string Title { get; set; }
     public string Observation { get; set; }
-    public IEnumerable<double> Coordinates { get; set; }
+    public List<double> Coordinates { get; set; }
     public SpotRateResponse LocationDifficulty { get; set; }
     public SpotRateResponse LocationRisk { get; set; }
-    public IEnumerable<string> Images { get; set; }
-    public IEnumerable<SpotFishResponse> Fishes { get; set; }
+    public List<string> Images { get; set; }
+    public List<SpotFishResponse> Fishes { get; set; }
     public SpotUserResponse User { get; set; }
 }
 
@@ -30,5 +30,5 @@ public class SpotFishResponse
     public string Name { get; set; }
     public double Weight { get; set; }
     public UnitMeasureType UnitMeasure { get; set; }
-    public IEnumerable<string> Lures { get; set; }
+    public List<string> Lures { get; set; }
 }

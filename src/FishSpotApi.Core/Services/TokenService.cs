@@ -25,30 +25,6 @@ public class TokenService(IConfiguration config, TokenRepository auth)
         return tokenHandler.WriteToken(token);
     }
 
-    public bool IsValidCurrentToken(string token)
-    {
-        var key = Encoding.ASCII.GetBytes(config["Authentication:AccessTokenSecret"] ?? "");
-        var mySecurityKey = new SymmetricSecurityKey(key);
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        try
-        {
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = mySecurityKey,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-            }, out SecurityToken validatedToken);
-        }
-        catch
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters
@@ -96,10 +72,5 @@ public class TokenService(IConfiguration config, TokenRepository auth)
         {
             auth.Delete(token.Id);
         }
-    }
-
-    public bool IsValidRefreshToken(string refreshToken, string token)
-    {
-        return auth.IsValidFields(refreshToken, token);
     }
 }

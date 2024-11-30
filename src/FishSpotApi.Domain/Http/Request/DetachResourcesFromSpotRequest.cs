@@ -9,5 +9,5 @@ public class DetachResourcesFromSpotRequest
     
     [Required(ErrorMessage = "The list with file must be filled")]
     [MinLength(1, ErrorMessage = "The minimum number of file id must be at least one")]
-    public IEnumerable<string> Files { get; set; }
+    public List<string> Files { get; set; }
 }

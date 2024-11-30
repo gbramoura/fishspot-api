@@ -17,14 +17,14 @@ public class CreateSpotRequest
     [Required(ErrorMessage = "The coordinates must be filled")]
     [MinLength(2, ErrorMessage = "The coordinates must be at least 2 characters long")]
     [MaxLength(2, ErrorMessage = "The coordinates must be at most 2 characters long")]
-    public IEnumerable<double> Coordinates { get; set; }
+    public List<double> Coordinates { get; set; }
     
     public CreateSpotLocationDifficultyRequest LocationDifficulty { get; set; }
     
     public CreateSpotLocationRiskRequest LocationRisk { get; set; }
     
     [MinLength(1, ErrorMessage = "Minimum length of fishes required")]
-    public IEnumerable<CreateSpotFishRequest> Fishes { get; set; }
+    public List<CreateSpotFishRequest> Fishes { get; set; }
 }
 
 public class CreateSpotLocationRiskRequest
@@ -58,5 +58,5 @@ public class CreateSpotFishRequest
     
     [MinLength(1, ErrorMessage = "The minimum number of lures must be at least one")]
     [MaxLength(3, ErrorMessage = "The limit of lures has been reached")]
-    public IEnumerable<string> Lures { get; set; }
+    public List<string> Lures { get; set; }
 }

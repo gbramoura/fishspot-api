@@ -6,10 +6,10 @@ namespace FishSpotApi.Core.Repository;
 
 public class UserRepository(FishSpotApiContext mongo) : BaseRepository<UserEntity>(mongo, "user")
 {
-    public IEnumerable<UserEntity> GetByEmail(string email)
+    public List<UserEntity> GetByEmail(string email)
     {
         var filter = Builders<UserEntity>.Filter.Eq(entity => entity.Email, email);
-        var token = _db.Find(filter).ToEnumerable();
+        var token = _db.Find(filter).ToList();
         return token;
     }
 }

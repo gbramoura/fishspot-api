@@ -15,5 +15,5 @@ public class SpotFish
     public UnitMeasureType UnitMeasure { get; set; }
 
     [BsonElement("lures")]
-    public IEnumerable<string> Lures { get; set; }
+    public List<string> Lures { get; set; }
 }

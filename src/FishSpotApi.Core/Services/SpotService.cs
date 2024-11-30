@@ -1,4 +1,5 @@
-﻿using FishSpotApi.Core.Repository;
+﻿using FishSpotApi.Core.Mapper;
+using FishSpotApi.Core.Repository;
 using FishSpotApi.Domain.Entity;
 using FishSpotApi.Domain.Entity.Objects;
 using FishSpotApi.Domain.Exception;
@@ -23,35 +24,8 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
             Id = user.Id,
             Name = user.Name
         };
-        var risk = new SpotLocationRisk()
-        {
-            Rate = createSpotRequest.LocationRisk.Rate,
-            Observation = createSpotRequest.LocationRisk.Observation
-        };
-        var difficulty = new SpotLocationDifficulty()
-        {
-            Rate = createSpotRequest.LocationDifficulty.Rate,
-            Observation = createSpotRequest.LocationDifficulty.Observation
-        };
-        var fishes = createSpotRequest.Fishes.Select(fish => new SpotFish()
-        {
-            Name = fish.Name,
-            Weight = fish.Weight,
-            UnitMeasure = fish.UnitMeasure,
-            Lures = fish.Lures,
-        });
-        
-        var spot = spotRepository.Insert(new SpotEntity
-        {
-            Images = [],
-            User = spotUser,
-            Fishes = fishes,
-            LocationRisk = risk,
-            Title = createSpotRequest.Title,
-            Observation = createSpotRequest.Observation,
-            Coordinates = createSpotRequest.Coordinates,
-            LocationDifficulty = difficulty,
-        });
+        var spotEntity = SpotMapper.CreateSpotRequestToEntity(createSpotRequest, spotUser);
+        var spot = spotRepository.Insert(spotEntity);
 
         return new SpotCreatedResponse
         {
@@ -63,44 +37,12 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
     public SpotResponse GetSpot(string id)
     {
         var spot = spotRepository.Get(id);
-
         if (spot is null)
         {
             throw new SpotNotFoundException("Spot not found");
         }
 
-        var difficulty = new SpotRateResponse
-        {
-            Rate = spot.LocationRisk.Rate.ToString(),
-            Observation = spot.LocationRisk.Observation
-        };
-        var risk = new SpotRateResponse
-        {
-            Rate = spot.LocationDifficulty.Rate.ToString(),
-            Observation = spot.LocationDifficulty.Observation
-        };
-        var fishes = spot.Fishes.Select(fish => new SpotFishResponse
-        {
-            Name = fish.Name,
-            Weight = fish.Weight,
-            UnitMeasure = fish.UnitMeasure,
-            Lures = fish.Lures,
-        });
-
-        return new SpotResponse()
-        {
-            Title = spot.Title,
-            Observation = spot.Observation,
-            Coordinates = spot.Coordinates,
-            Images = spot.Images,
-            LocationRisk = difficulty,
-            LocationDifficulty = risk,
-            Fishes = fishes,
-            User = new SpotUserResponse()
-            {
-                Name = spot.User.Name,
-            }
-        };
+        return SpotMapper.SpotEntityToResponse(spot);
     }
 
     public IEnumerable<SpotLocationResponse> GetNearLocations()
@@ -141,41 +83,13 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
             throw new UserNotAuthorizedException("User is not authorized to update spot");
         }
         
-        var risk = new SpotLocationRisk()
-        {
-            Rate = updateSpotRequest.LocationRisk.Rate,
-            Observation = updateSpotRequest.LocationRisk.Observation
-        };
-        var difficulty = new SpotLocationDifficulty()
-        {
-            Rate = updateSpotRequest.LocationDifficulty.Rate,
-            Observation = updateSpotRequest.LocationDifficulty.Observation
-        };
-        var fishes = updateSpotRequest.Fishes.Select(fish => new SpotFish()
-        {
-            Name = fish.Name,
-            Weight = fish.Weight,
-            UnitMeasure = fish.UnitMeasure,
-            Lures = fish.Lures,
-        });
-        
-        spotRepository.Update(new SpotEntity
-        {
-            Images = [],
-            User = spot.User,
-            Fishes = fishes,
-            LocationRisk = risk,
-            LocationDifficulty = difficulty,
-            Title = updateSpotRequest.Title,
-            Observation = updateSpotRequest.Observation,
-            Coordinates = updateSpotRequest.Coordinates,
-        });
+        var spotEntity = SpotMapper.UpdateSpotRequestToEntity(updateSpotRequest, spot.User, spot.Images);
+        spotRepository.Update(spotEntity);
     }
     
     public void DeleteSpot(string id, string userId)
     {
         var spot = spotRepository.Get(id);
-
         if (spot is null)
         {
             throw new SpotNotFoundException("Spot not found");
@@ -185,12 +99,8 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         {
             throw new UserNotAuthorizedException("User is not authorized to delete spot");
         }
-
-        foreach (var spotImage in spot.Images)
-        {
-            fileService.DeleteFile(spotImage);
-        }
-        
+    
+        spot.Images.ForEach(fileService.DeleteFile);
         spotRepository.Delete(id);
     }
 }
