@@ -51,4 +51,39 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
             throw new InvalidImageException("Unable to save files", e); 
         }
     }
+
+
+    public void DetachSpotResources(DetachResourcesFromSpotRequest detachRequest)
+    {
+        var spot = spotRepository.Get(detachRequest.SpotId);
+        if (spot is null)
+        {
+            throw new SpotNotFoundException("Spot not found");
+        }
+
+        if (!detachRequest.Files.Any(file => spot.Images.Contains(file)))
+        {
+            throw new ImageNotFoundException("Image not found");
+        }
+        
+        var deletedFiles = new List<string>();
+        try
+        {
+            foreach (var file in detachRequest.Files)
+            {
+                fileService.DeleteFile(file);
+                deletedFiles.Add(file);
+            }
+        }
+        catch (Exception e)
+        {
+            throw new InvalidImageException("An error was caught when tried to detach the resources", e);
+        }
+        finally
+        {
+            spot.Images = spot.Images.Where(img => deletedFiles.Contains(img));
+            spotRepository.Update(spot);
+        }
+        
+    }
 }

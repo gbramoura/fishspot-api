@@ -69,11 +69,49 @@ public class ResourcesController(ResourcesService resourcesService) : Controller
             http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (Exception err)
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal Server Error";
-            http.Error = err.Message;
+            http.Error = e.Message;
+            return StatusCode(http.Code, http);
+        }
+    }
+    
+    
+    [HttpPost("/detach-to-spot")]
+    [Authorize(Roles = "user")]
+    public ActionResult<DefaultResponse> DetachResourcesToSpot([FromForm] DetachResourcesFromSpotRequest request)
+    {
+        var http = new DefaultResponse()
+        {
+            Code = StatusCodes.Status400BadRequest,
+            Message = "Don't authorized"
+        };
+        
+        try
+        {
+            resourcesService.DetachSpotResources(request);
+                
+            http.Message = "The resources were detached to a spot";
+            http.Code = StatusCodes.Status200OK;
+            return http;
+        }
+        catch (Exception e) when(e is InvalidImageException or ImageNotFoundException)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (SpotNotFoundException e)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (Exception e)
+        {
+            http.Code = StatusCodes.Status500InternalServerError;
+            http.Message = "Internal Server Error";
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
