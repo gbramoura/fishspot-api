@@ -9,7 +9,7 @@ using System.Text;
 
 namespace FishSpotApi.Core.Services;
 
-public class UserService(UserRepository userRepository, RecoverPasswordRepository recoverRepository, TokenService tokenService, MailService mailService)
+public class UserService(UserRepository userRepository, RecoverPasswordRepository recoverRepository, TokenService tokenService, MailService mailService, RecoverTokenService recoverTokenService)
 {
     public void RegisterUser(UserRegisterRequest payload)
     {
@@ -93,67 +93,36 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
             throw new UserNotFoundException("User not found");
         }
 
-        mailService.SendRecoverPasswordMail(user.Email, user.Name, GenerateToken(user.Email));
+        mailService.SendRecoverPasswordMail(user.Email, user.Name, recoverTokenService.GenerateToken(user.Email));
     }
 
     public void ChangePassword(ChangePasswordRequest payload)
     {
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
-
         if (user is null)
         {
             throw new UserNotFoundException("User not found");
         }
 
-        if (VerifyToken(payload.Token, payload.Email))
+        if (recoverTokenService.VerifyToken(payload.Token, payload.Email))
         {
             throw new InvalidRecoverTokenException("The token is invalid");
         }
-
+            
+        recoverTokenService.DeleteToken(payload.Token, payload.Email);
         user.Password = PasswordUtils.EncryptPassword(payload.NewPassword);
 
         userRepository.Update(user);
     }
 
-    private string GenerateToken(string email)
+    public bool ValidateRecoverToken(RecoverTokenRequest payload)
     {
-        var strBuilder = new StringBuilder();
-        var random = new Random();
-        char letter;
-
-        for (int i = 0; i < 5; i++)
+        var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
+        if (user is null)
         {
-            int shift = Convert.ToInt32(Math.Floor(25 * random.NextDouble()));
-            letter = Convert.ToChar(shift + 65);
-            strBuilder.Append(letter);
+            throw new UserNotFoundException("User not found");
         }
 
-        recoverRepository.Insert(new RecoverPasswordEntity
-        {
-            Email = email,
-            Token = strBuilder.ToString(),
-            ExpirationDate = DateTime.Now.AddDays(1)
-        });
-
-        return strBuilder.ToString();
-    }
-
-    private bool VerifyToken(string token, string email)
-    {
-        var recoverToken = recoverRepository.GetByTokenAndEmail(token, email);
-        var date = DateTime.Now;
-
-        if (recoverToken is null)
-        {
-            return false;
-        }
-
-        var isRecoverTokenValid =
-            recoverToken.ExpirationDate < date.AddMinutes(-5) &&
-            recoverToken.ExpirationDate > date.AddMinutes(5);
-
-        recoverRepository.Delete(recoverToken.Id);
-
-        return isRecoverTokenValid;
+        return recoverTokenService.VerifyToken(payload.Token, payload.Email);
     }
 }

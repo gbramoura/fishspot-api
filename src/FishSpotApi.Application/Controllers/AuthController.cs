@@ -140,15 +140,52 @@ public class AuthController(UserService userService) : ControllerBase
             http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (Exception E)
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal Server Error";
-            http.Error = E.Message;
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
 
+    [HttpPost("validate-recover-token/")]
+    [AllowAnonymous]
+    public ActionResult<DefaultResponse> ValidateRecoverToken([FromBody] RecoverTokenRequest payload)
+    {
+        var http = new DefaultResponse()
+        {
+            Code = StatusCodes.Status400BadRequest,
+            Message = "Don't authorized."
+        };
+
+        try
+        {
+            if (userService.ValidateRecoverToken(payload))
+            {
+                http.Message = "The token is valid";
+                http.Code = StatusCodes.Status200OK;
+                return StatusCode(http.Code, http);
+            }
+            
+            http.Message = "The token is not valid";
+            http.Code = StatusCodes.Status200OK;
+            return StatusCode(http.Code, http);
+        }
+        catch (UserNotFoundException e)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (Exception e)
+        {
+            http.Code = StatusCodes.Status500InternalServerError;
+            http.Message = "Internal Server Error";
+            http.Error = e.Message;
+            return StatusCode(http.Code, http);
+        }
+    }
+    
     [HttpPost("change-password/")]
     [AllowAnonymous]
     public ActionResult<DefaultResponse> ChangePassword([FromBody] ChangePasswordRequest payload)
@@ -177,11 +214,11 @@ public class AuthController(UserService userService) : ControllerBase
             http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
-        catch (Exception E)
+        catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = "Internal Server Error";
-            http.Error = E.Message;
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }

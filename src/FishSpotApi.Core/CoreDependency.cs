@@ -24,5 +24,6 @@ public static class CoreDependency
         services.AddScoped<SpotService>();
         services.AddScoped<FileService>();
         services.AddScoped<ResourcesService>();
+        services.AddScoped<RecoverTokenService>();
     }
 }
