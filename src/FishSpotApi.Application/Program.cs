@@ -4,10 +4,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 using FishSpotApi.Application.ConfigurationExtension;
+using FishSpotApi.Application.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new ValidationFilter());
+}).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
@@ -40,6 +45,11 @@ builder.Services.AddCors(options =>
             policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
         });
     });
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
