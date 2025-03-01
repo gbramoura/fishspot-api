@@ -83,6 +83,19 @@ public class AuthController(UserService userService) : ControllerBase
         }
     }
 
+    [HttpPost("is-auth")]
+    [Authorize(Roles = "user")]
+    public ActionResult<DefaultResponse> IsAuth()
+    {
+        var http = new DefaultResponse()
+        {
+            Code = StatusCodes.Status200OK,
+            Message = "Is authenticated"
+        };
+        
+        return StatusCode(http.Code, http);
+    }
+    
     [HttpPost("refresh-token/")]
     [AllowAnonymous]
     public ActionResult<DefaultResponse> RefreshToken([FromBody] RefreshTokenRequest body)
