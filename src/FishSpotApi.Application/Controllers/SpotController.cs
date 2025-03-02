@@ -5,12 +5,13 @@ using FishSpotApi.Domain.Http;
 using FishSpotApi.Domain.Http.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Application.Controllers;
 
 [ApiController]
 [Route("spot")]
-public class SpotController(SpotService spotService) : ControllerBase
+public class SpotController(SpotService spotService, IStringLocalizer<Resources.Resources> localizer) : ControllerBase
 {
     [HttpPost]
     [Authorize(Roles = "user")]
@@ -19,7 +20,7 @@ public class SpotController(SpotService spotService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -28,19 +29,19 @@ public class SpotController(SpotService spotService) : ControllerBase
             var createdSpot = spotService.CreateSpot(createSpotRequest, userid ?? string.Empty);
 
             http.Code = StatusCodes.Status201Created;
-            http.Message = "Spot registered successfully";
+            http.Message = localizer["spot_registered_successfully"];
             http.Response = createdSpot;
             return StatusCode(http.Code, http);
         }
         catch (UserNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -53,7 +54,7 @@ public class SpotController(SpotService spotService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -61,19 +62,19 @@ public class SpotController(SpotService spotService) : ControllerBase
             var spot = spotService.GetSpot(id);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Spot find";
+            http.Message = localizer["spot_find"];
             http.Response = spot;
             return StatusCode(http.Code, http);
         }
         catch (SpotNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -86,7 +87,7 @@ public class SpotController(SpotService spotService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -95,14 +96,14 @@ public class SpotController(SpotService spotService) : ControllerBase
             var locations = spotService.GetNearLocations();
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Locations find";
+            http.Message = localizer["spot_location_find"];
             http.Response = locations;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -115,7 +116,7 @@ public class SpotController(SpotService spotService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -124,14 +125,14 @@ public class SpotController(SpotService spotService) : ControllerBase
             var locations = spotService.GetUserLocations(userid ?? string.Empty, listRequest);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Locations find";
+            http.Message = localizer["spot_location_find"];
             http.Response = locations;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -144,7 +145,7 @@ public class SpotController(SpotService spotService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -153,23 +154,23 @@ public class SpotController(SpotService spotService) : ControllerBase
             spotService.UpdateSpot(id, updateSpotRequest, userId ?? string.Empty);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Spot updated successfully";
+            http.Message = localizer["spot_updated_successfully"];
             return StatusCode(http.Code, http);
         }
         catch (SpotNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (UserNotAuthorizedException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -182,7 +183,7 @@ public class SpotController(SpotService spotService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -191,23 +192,23 @@ public class SpotController(SpotService spotService) : ControllerBase
             spotService.DeleteSpot(id, userId ?? string.Empty);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Spot deleted successfully";
+            http.Message = localizer["spot_deleted_successfully"];
             return StatusCode(http.Code, http);
         }
         catch (SpotNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (UserNotAuthorizedException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }

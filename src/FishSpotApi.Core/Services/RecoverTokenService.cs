@@ -52,7 +52,7 @@ public class RecoverTokenService(RecoverPasswordRepository recoverRepository)
 
         if (recoverToken is null)
         {
-            throw new Exception("Token not found");
+            throw new Exception("token_not_found");
         }
 
         recoverRepository.Delete(recoverToken.Id);

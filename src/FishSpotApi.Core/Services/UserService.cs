@@ -29,12 +29,12 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
         if (user is null)
         {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("user_not_found");
         }
 
         if (!PasswordUtils.VerifyPassword(user.Password, payload.Password))
         {
-            throw new IncorrectPasswordException("Password is not correct");
+            throw new IncorrectPasswordException("user_password_incorrect");
         }
 
         var userRefreshToken = tokenService.GenerateRefreshToken();
@@ -68,7 +68,7 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var savedRefreshToken = tokenService.GetRefreshToken(value);
         if (savedRefreshToken != payload.RefreshToken)
         {
-            throw new RefreshTokenInvalidException("Invalid refresh token");
+            throw new RefreshTokenInvalidException("token_refresh_invalid");
         }
 
         var newJwtToken = tokenService.GenerateToken(claims);
@@ -90,7 +90,7 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
 
         if (user is null)
         {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("user_not_found");
         }
 
         mailService.SendRecoverPasswordMail(user.Email, user.Name, recoverTokenService.GenerateToken(user.Email));
@@ -101,12 +101,12 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
         if (user is null)
         {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("user_not_found");
         }
 
         if (recoverTokenService.VerifyToken(payload.Token, payload.Email))
         {
-            throw new InvalidRecoverTokenException("The token is invalid");
+            throw new InvalidRecoverTokenException("token_invalid");
         }
             
         recoverTokenService.DeleteToken(payload.Token, payload.Email);
@@ -120,7 +120,7 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
         if (user is null)
         {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("user_not_found");
         }
 
         return recoverTokenService.VerifyToken(payload.Token, payload.Email);

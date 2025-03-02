@@ -1,15 +1,17 @@
-﻿using FishSpotApi.Core.Services;
+﻿using FishSpotApi.Application.Resources;
+using FishSpotApi.Core.Services;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http;
 using FishSpotApi.Domain.Http.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Application.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController(UserService userService) : ControllerBase
+public class AuthController(UserService userService, IStringLocalizer<Resources.Resources> localizer) : ControllerBase
 {
     [HttpPost("register/")]
     [AllowAnonymous]
@@ -18,28 +20,28 @@ public class AuthController(UserService userService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
         {
             if (userService.IsUniqueEmail(body.Email))
             {
-                http.Message = "E-mail already in use";
+                http.Message = localizer["email_in_use"];
                 return StatusCode(http.Code, http);
             }
 
             userService.RegisterUser(body);
 
             http.Code = StatusCodes.Status201Created;
-            http.Message = "User registered successfully";
+            http.Message = localizer["user_register_successfully"];
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
-            http.Error = e.Message;
+            http.Message = localizer["internal_server_error"];
+            http.Error = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
     }
@@ -51,7 +53,7 @@ public class AuthController(UserService userService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -59,25 +61,25 @@ public class AuthController(UserService userService) : ControllerBase
             var userResponse = userService.LoginUser(body);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "User was correctly authenticated.";
+            http.Message = localizer["user_authenticated"];
             http.Response = userResponse;
 
             return StatusCode(http.Code, http);
         }
         catch (UserNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];;
             return StatusCode(http.Code, http);
         }
         catch (IncorrectPasswordException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal server error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -90,12 +92,12 @@ public class AuthController(UserService userService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status200OK,
-            Message = "Is authenticated"
+            Message = localizer["is_authenticated"]
         };
-        
+
         return StatusCode(http.Code, http);
     }
-    
+
     [HttpPost("refresh-token/")]
     [AllowAnonymous]
     public ActionResult<DefaultResponse> RefreshToken([FromBody] RefreshTokenRequest body)
@@ -103,7 +105,7 @@ public class AuthController(UserService userService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -111,20 +113,20 @@ public class AuthController(UserService userService) : ControllerBase
             var refreshResponse = userService.RefreshToken(body);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Token refreshed";
+            http.Message = localizer["token_refreshed"];
             http.Response = refreshResponse;
 
             return StatusCode(http.Code, http);
         }
         catch (RefreshTokenInvalidException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal Server Error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -137,7 +139,7 @@ public class AuthController(UserService userService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized."
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -145,18 +147,18 @@ public class AuthController(UserService userService) : ControllerBase
             userService.GenerateRecoverToken(payload);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "A validation token was sent to your e-mail";
+            http.Message = localizer["token_email_sent"];
             return StatusCode(http.Code, http);
         }
         catch (UserNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal Server Error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
@@ -169,36 +171,36 @@ public class AuthController(UserService userService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized."
+            Message = localizer["unauthorized"]
         };
 
         try
         {
             if (userService.ValidateRecoverToken(payload))
             {
-                http.Message = "The token is valid";
+                http.Message = localizer["token_valid"];
                 http.Code = StatusCodes.Status200OK;
                 return StatusCode(http.Code, http);
             }
-            
-            http.Message = "The token is not valid";
+
+            http.Message = localizer["token_invalid"];
             http.Code = StatusCodes.Status200OK;
             return StatusCode(http.Code, http);
         }
         catch (UserNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal Server Error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
-    
+
     [HttpPost("change-password/")]
     [AllowAnonymous]
     public ActionResult<DefaultResponse> ChangePassword([FromBody] ChangePasswordRequest payload)
@@ -206,7 +208,7 @@ public class AuthController(UserService userService) : ControllerBase
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized"
+            Message = localizer["unauthorized"]
         };
 
         try
@@ -214,23 +216,23 @@ public class AuthController(UserService userService) : ControllerBase
             userService.ChangePassword(payload);
 
             http.Code = StatusCodes.Status200OK;
-            http.Message = "Password changed successfully";
+            http.Message = localizer["password_changed"];
             return StatusCode(http.Code, http);
         }
         catch (InvalidRecoverTokenException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (UserNotFoundException e)
         {
-            http.Message = e.Message;
+            http.Message = localizer[e.Message];
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
         {
             http.Code = StatusCodes.Status500InternalServerError;
-            http.Message = "Internal Server Error";
+            http.Message = localizer["internal_server_error"];
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }

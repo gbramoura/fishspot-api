@@ -41,7 +41,7 @@ public class TokenService(IConfiguration config, TokenRepository auth)
         if (securityToken is not JwtSecurityToken jwtSecurityToken ||
             !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
         {
-            throw new SecurityTokenException("Invalid Token");
+            throw new SecurityTokenException("token_invalid");
         }
 
         return principal;

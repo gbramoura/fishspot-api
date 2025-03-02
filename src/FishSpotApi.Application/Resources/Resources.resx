@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="unauthorized" xml:space="preserve">
+        <value>Don't authorized</value>
+    </data>
+    <data name="email_in_use" xml:space="preserve">
+        <value>E-mail already in use</value>
+    </data>
+    <data name="user_register_successfully" xml:space="preserve">
+        <value>User registered successfully</value>
+    </data>
+    <data name="internal_server_error" xml:space="preserve">
+        <value>Internal server error</value>
+    </data>
+    <data name="user_authenticated" xml:space="preserve">
+        <value>User was correctly authenticated.</value>
+    </data>
+    <data name="is_authenticated" xml:space="preserve">
+        <value>Is authenticated</value>
+    </data>
+    <data name="token_refreshed" xml:space="preserve">
+        <value>Token refreshed</value>
+    </data>
+    <data name="token_email_sent" xml:space="preserve">
+        <value>A validation token was sent to your e-mail</value>
+    </data>
+    <data name="token_valid" xml:space="preserve">
+        <value>The token is valid</value>
+    </data>
+    <data name="token_invalid" xml:space="preserve">
+        <value>The token is invalid</value>
+    </data>
+    <data name="password_changed" xml:space="preserve">
+        <value>Password changed successfully</value>
+    </data>
+    <data name="resource_attached" xml:space="preserve">
+        <value>The resources were attached to a spot</value>
+    </data>
+    <data name="resource_detached" xml:space="preserve">
+        <value>The resources were detached to a spot</value>
+    </data>
+    <data name="spot_registered_successfully" xml:space="preserve">
+        <value>Spot registered successfully</value>
+    </data>
+    <data name="spot_find" xml:space="preserve">
+        <value>Spot find</value>
+    </data>
+    <data name="spot_location_find" xml:space="preserve">
+        <value>Locations find</value>
+    </data>
+    <data name="spot_updated_successfully" xml:space="preserve">
+        <value>Spot updated successfully</value>
+    </data>
+    <data name="spot_deleted_successfully" xml:space="preserve">
+        <value>Spot deleted successfully</value>
+    </data>
+    <data name="user_not_found" xml:space="preserve">
+        <value>User not found</value>
+    </data>
+    <data name="user_password_incorrect" xml:space="preserve">
+        <value>Password is not correct</value>
+    </data>
+    <data name="token_refresh_invalid" xml:space="preserve">
+        <value>Invalid refresh token</value>
+    </data>
+    <data name="spot_not_found" xml:space="preserve">
+        <value>Spot not found</value>
+    </data>
+    <data name="user_not_authorized_to_update_spot" xml:space="preserve">
+        <value>User is not authorized to update spot</value>
+    </data>
+    <data name="user_not_authorized_to_delete_spot" xml:space="preserve">
+        <value>User is not authorized to delete spot</value>
+    </data>
+    <data name="resource_not_found" xml:space="preserve">
+        <value>Resource not found</value>
+    </data>
+    <data name="resource_unable_to_save" xml:space="preserve">
+        <value>Unable to save files</value>
+    </data>
+    <data name="resource_unable_to_detach" xml:space="preserve">
+        <value>An error was caught when tried to detach the resources</value>
+    </data>
+    <data name="token_not_found" xml:space="preserve">
+        <value>Token not found</value>
+    </data>
+</root>
