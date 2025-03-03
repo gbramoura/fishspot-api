@@ -216,4 +216,31 @@
     <data name="annotation_lures_max_length" xml:space="preserve">
         <value>The limit of lures has been reached</value>
     </data>
+    <data name="user_default_description" xml:space="preserve">
+        <value>Life is like fishing: sometimes you catch a big fish, sometimes you come back empty-handed.</value>
+    </data>
+    <data name="user_found_successfully" xml:space="preserve">
+        <value>User found successfully</value>
+    </data>
+    <data name="annotation_description_required" xml:space="preserve">
+        <value>The description must be filled</value>
+    </data>
+    <data name="annotation_description_max_length" xml:space="preserve">
+        <value>The limit of characters 245 has been reached</value>
+    </data>
+    <data name="annotation_username_max_length" xml:space="preserve">
+        <value>The limit of characters 20 has been reached</value>
+    </data>
+    <data name="annotation_street_max_length" xml:space="preserve">
+        <value>The limit of characters 245 has been reached</value>
+    </data>
+    <data name="annotation_neighborhood_max_length" xml:space="preserve">
+        <value>The limit of characters 245 has been reached</value>
+    </data>
+    <data name="annotation_zip_code_max_length" xml:space="preserve">
+        <value>The limit of characters 8 has been reached</value>
+    </data>
+    <data name="user_updated_successfully" xml:space="preserve">
+        <value>User updated successfully</value>
+    </data>
 </root>

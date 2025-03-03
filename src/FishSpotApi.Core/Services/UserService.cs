@@ -6,6 +6,7 @@ using FishSpotApi.Domain.Http.Request;
 using FishSpotApi.Domain.Http.Response;
 using System.Security.Claims;
 using System.Text;
+using FishSpotApi.Core.Mapper;
 using FishSpotApi.Domain.Resources;
 using Microsoft.Extensions.Localization;
 
@@ -14,17 +15,43 @@ namespace FishSpotApi.Core.Services;
 public class UserService(UserRepository userRepository, TokenService tokenService, MailService mailService, RecoverTokenService recoverTokenService, IStringLocalizerFactory factory)
 {
     private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
+    
     public void RegisterUser(UserRegisterRequest payload)
     {
         userRepository.Insert(new UserEntity
         {
             Email = payload.Email,
             Name = payload.Name,
+            Username = GenerateUsername(payload.Name, payload.Email),
+            Description = _localizer["user_default_description"],
             Password = PasswordUtils.EncryptPassword(payload.Password),
             UniqueIdentifierToken = Guid.NewGuid().ToString()
         });
     }
 
+    public UserResponse GetUser(string userId)
+    {
+        var user = userRepository.Get(userId);
+        if (user is null)
+        {
+            throw new SpotNotFoundException(_localizer["user_not_found"]);
+        }
+        
+        return UserMapper.UserEntityToUserResponse(user);
+    }
+
+    public void UpdateUser(UserUpdateRequest payload, string userId)
+    {
+        var user = userRepository.Get(userId);
+        if (user is null)
+        {
+            throw new SpotNotFoundException(_localizer["user_not_found"]);
+        }
+        
+        var userEntity = UserMapper.UserUpdateRequestToUserEntity(user, payload);
+        userRepository.Update(userEntity);
+    }
+    
     public bool IsUniqueEmail(string email) => userRepository.GetByEmail(email).Any();
 
     public UserLoginResponse LoginUser(UserLoginRequest payload)
@@ -127,5 +154,11 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
         }
 
         return recoverTokenService.VerifyToken(payload.Token, payload.Email);
+    }
+
+    private string GenerateUsername(String name, String email)
+    {
+        // TODO: create the generator username
+        return name;
     }
 }

@@ -216,4 +216,31 @@
     <data name="annotation_lures_max_length" xml:space="preserve">
         <value>O limite de iscas foi atingido</value>
     </data>
+    <data name="user_default_description" xml:space="preserve">
+        <value>A vida é como pescar: às vezes você pega um peixe grande, às vezes volta com as mãos vazias</value>
+    </data>
+    <data name="user_found_successfully" xml:space="preserve">
+        <value>Usuário encontrado com sucesso</value>
+    </data>
+    <data name="annotation_description_max_length" xml:space="preserve">
+        <value>O limite de 245 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_description_required" xml:space="preserve">
+        <value>A descrição deve ser preenchidas</value>
+    </data>
+    <data name="annotation_neighborhood_max_length" xml:space="preserve">
+        <value>O limite de 245 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_street_max_length" xml:space="preserve">
+        <value>O limite de 245 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_username_max_length" xml:space="preserve">
+        <value>O limite de 20 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_zip_code_max_length" xml:space="preserve">
+        <value>O limite de 8 caracteres foi atingido</value>
+    </data>
+    <data name="user_updated_successfully" xml:space="preserve">
+        <value>Usuário atualizado com sucesso</value>
+    </data>
 </root>
