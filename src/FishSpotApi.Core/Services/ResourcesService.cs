@@ -1,18 +1,21 @@
 using FishSpotApi.Core.Repository;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http.Request;
+using FishSpotApi.Domain.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class ResourcesService(SpotRepository spotRepository, FileService fileService)
+public class ResourcesService(SpotRepository spotRepository, FileService fileService, IStringLocalizerFactory factory)
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     private readonly List<string> _allowedFileExtensions = [".jpg", ".jpeg", ".png"];
     
     public (FileStream resource, string Extesion) GetResource(string fileName)
     {
         if (!fileService.Exists(fileName))
         {
-            throw new ImageNotFoundException("resource_not_found");
+            throw new ImageNotFoundException(_localizer["resource_not_found"]);
         }
         
         return (resource: fileService.ReadFile(fileName), fileService.GetFileExtension(fileName));
@@ -23,7 +26,7 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
         var spot = spotRepository.Get(attachRequest.SpotId);
         if (spot is null)
         {
-            throw new SpotNotFoundException("spot_not_found");
+            throw new SpotNotFoundException(_localizer["spot_not_found"]);
         }
 
         var savedFiles = new List<string>();
@@ -41,7 +44,7 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
         catch (Exception e)
         {
             savedFiles.ForEach(fileService.DeleteFile);
-            throw new InvalidImageException("resource_unable_to_save", e); 
+            throw new InvalidImageException(_localizer["resource_unable_to_save"], e); 
         }
     }
     
@@ -50,12 +53,12 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
         var spot = spotRepository.Get(detachRequest.SpotId);
         if (spot is null)
         {
-            throw new SpotNotFoundException("user_not_found");
+            throw new SpotNotFoundException(_localizer["user_not_found"]);
         }
 
         if (!detachRequest.Files.Any(file => spot.Images.Contains(file)))
         {
-            throw new ImageNotFoundException("resource_not_found");
+            throw new ImageNotFoundException(_localizer["resource_not_found"]);
         }
         
         var deletedFiles = new List<string>();
@@ -69,7 +72,7 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
         }
         catch (Exception e)
         {
-            throw new InvalidImageException("resource_unable_to_detach", e);
+            throw new InvalidImageException(_localizer["resource_unable_to_detach"], e);
         }
         finally
         {

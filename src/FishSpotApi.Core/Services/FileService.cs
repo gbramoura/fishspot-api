@@ -1,10 +1,13 @@
+using FishSpotApi.Domain.Resources;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class FileService(IWebHostEnvironment environment)
+public class FileService(IWebHostEnvironment environment, IStringLocalizerFactory factory)
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     private readonly string _contentPath = environment.ContentRootPath;
     private readonly string _uploadPath = "Uploads";
     
@@ -29,7 +32,7 @@ public class FileService(IWebHostEnvironment environment)
         var fileExtension = Path.GetExtension(imageFile.FileName);
         if (!allowedFileExtensions.Contains(fileExtension))
         {
-            throw new ArgumentException($"Only {string.Join(",", allowedFileExtensions)} are allowed.");
+            throw new ArgumentException(_localizer["resource_file_allowed", string.Join(",", allowedFileExtensions)]);
         }
         
         var fileName = $"{Guid.NewGuid().ToString()}{fileExtension}";
@@ -45,7 +48,7 @@ public class FileService(IWebHostEnvironment environment)
     {
         if (!Exists(fileName))
         {
-            throw new FileNotFoundException($"file {fileName} not found");
+            throw new FileNotFoundException(_localizer["resource_file_not_found", fileName]);
         }
         return new FileStream(Path.Combine(_contentPath, _uploadPath, fileName), FileMode.Open);
     }
@@ -54,7 +57,7 @@ public class FileService(IWebHostEnvironment environment)
     {
         if (!Exists(fileName))
         {
-            throw new FileNotFoundException($"file {fileName} not found");
+            throw new FileNotFoundException(_localizer["resource_file_not_found", fileName]);
         }
         File.Delete(Path.Combine(_contentPath, _uploadPath, fileName));
     }

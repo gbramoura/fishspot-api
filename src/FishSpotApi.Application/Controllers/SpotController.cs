@@ -3,6 +3,7 @@ using FishSpotApi.Core.Services;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http;
 using FishSpotApi.Domain.Http.Request;
+using FishSpotApi.Domain.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -11,7 +12,7 @@ namespace FishSpotApi.Application.Controllers;
 
 [ApiController]
 [Route("spot")]
-public class SpotController(SpotService spotService, IStringLocalizer<Resources.Resources> localizer) : ControllerBase
+public class SpotController(SpotService spotService, IStringLocalizer<FishSpotResource> localizer) : ControllerBase
 {
     [HttpPost]
     [Authorize(Roles = "user")]
@@ -35,7 +36,7 @@ public class SpotController(SpotService spotService, IStringLocalizer<Resources.
         }
         catch (UserNotFoundException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
@@ -68,7 +69,7 @@ public class SpotController(SpotService spotService, IStringLocalizer<Resources.
         }
         catch (SpotNotFoundException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
@@ -136,8 +137,8 @@ public class SpotController(SpotService spotService, IStringLocalizer<Resources.
             http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
-    } 
-    
+    }
+
     [HttpPut("{id}")]
     [Authorize(Roles = "user")]
     public ActionResult<DefaultResponse> UpdateSpot(string id, [FromBody] UpdateSpotRequest updateSpotRequest)
@@ -159,12 +160,12 @@ public class SpotController(SpotService spotService, IStringLocalizer<Resources.
         }
         catch (SpotNotFoundException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (UserNotAuthorizedException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
@@ -175,7 +176,7 @@ public class SpotController(SpotService spotService, IStringLocalizer<Resources.
             return StatusCode(http.Code, http);
         }
     }
-    
+
     [HttpDelete("{id}")]
     [Authorize(Roles = "user")]
     public ActionResult<DefaultResponse> DeleteSpot(string id)
@@ -197,12 +198,12 @@ public class SpotController(SpotService spotService, IStringLocalizer<Resources.
         }
         catch (SpotNotFoundException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (UserNotAuthorizedException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)

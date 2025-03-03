@@ -6,11 +6,14 @@ using FishSpotApi.Domain.Http.Request;
 using FishSpotApi.Domain.Http.Response;
 using System.Security.Claims;
 using System.Text;
+using FishSpotApi.Domain.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class UserService(UserRepository userRepository, RecoverPasswordRepository recoverRepository, TokenService tokenService, MailService mailService, RecoverTokenService recoverTokenService)
+public class UserService(UserRepository userRepository, TokenService tokenService, MailService mailService, RecoverTokenService recoverTokenService, IStringLocalizerFactory factory)
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     public void RegisterUser(UserRegisterRequest payload)
     {
         userRepository.Insert(new UserEntity
@@ -29,12 +32,12 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
         if (user is null)
         {
-            throw new UserNotFoundException("user_not_found");
+            throw new UserNotFoundException(_localizer["user_not_found"]);
         }
 
         if (!PasswordUtils.VerifyPassword(user.Password, payload.Password))
         {
-            throw new IncorrectPasswordException("user_password_incorrect");
+            throw new IncorrectPasswordException(_localizer["user_password_incorrect"]);
         }
 
         var userRefreshToken = tokenService.GenerateRefreshToken();
@@ -68,7 +71,7 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var savedRefreshToken = tokenService.GetRefreshToken(value);
         if (savedRefreshToken != payload.RefreshToken)
         {
-            throw new RefreshTokenInvalidException("token_refresh_invalid");
+            throw new RefreshTokenInvalidException(_localizer["token_refresh_invalid"]);
         }
 
         var newJwtToken = tokenService.GenerateToken(claims);
@@ -90,7 +93,7 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
 
         if (user is null)
         {
-            throw new UserNotFoundException("user_not_found");
+            throw new UserNotFoundException(_localizer["user_not_found"]);
         }
 
         mailService.SendRecoverPasswordMail(user.Email, user.Name, recoverTokenService.GenerateToken(user.Email));
@@ -101,12 +104,12 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
         if (user is null)
         {
-            throw new UserNotFoundException("user_not_found");
+            throw new UserNotFoundException(_localizer["user_not_found"]);
         }
 
         if (recoverTokenService.VerifyToken(payload.Token, payload.Email))
         {
-            throw new InvalidRecoverTokenException("token_invalid");
+            throw new InvalidRecoverTokenException(_localizer["token_invalid"]);
         }
             
         recoverTokenService.DeleteToken(payload.Token, payload.Email);
@@ -120,7 +123,7 @@ public class UserService(UserRepository userRepository, RecoverPasswordRepositor
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
         if (user is null)
         {
-            throw new UserNotFoundException("user_not_found");
+            throw new UserNotFoundException(_localizer["user_not_found"]);
         }
 
         return recoverTokenService.VerifyToken(payload.Token, payload.Email);

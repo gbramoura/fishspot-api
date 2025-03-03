@@ -5,18 +5,21 @@ using FishSpotApi.Domain.Entity.Objects;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http.Request;
 using FishSpotApi.Domain.Http.Response;
+using FishSpotApi.Domain.Resources;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class SpotService(SpotRepository spotRepository, UserRepository userRepository, FileService fileService)
+public class SpotService(SpotRepository spotRepository, UserRepository userRepository, FileService fileService, IStringLocalizerFactory factory)
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     public SpotCreatedResponse CreateSpot(CreateSpotRequest createSpotRequest, string userId)
     {
         var user = userRepository.Get(userId);
         if (user is null)
         {
-            throw new UserNotFoundException("spot_not_found");
+            throw new UserNotFoundException(_localizer["spot_not_found"]);
         }
 
         var spotUser = new SpotUser()
@@ -39,7 +42,7 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         var spot = spotRepository.Get(id);
         if (spot is null)
         {
-            throw new SpotNotFoundException("spot_not_found");
+            throw new SpotNotFoundException(_localizer["spot_not_found"]);
         }
 
         return SpotMapper.SpotEntityToResponse(spot);
@@ -75,12 +78,12 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         var spot = spotRepository.Get(spotId);
         if (spot is null)
         {
-            throw new SpotNotFoundException("spot_not_found");
+            throw new SpotNotFoundException(_localizer["spot_not_found"]);
         }
 
         if (userId != spot.User.Id)
         {
-            throw new UserNotAuthorizedException("user_not_authorized_to_update_spot");
+            throw new UserNotAuthorizedException(_localizer["user_not_authorized_to_update_spot"]);
         }
         
         var spotEntity = SpotMapper.UpdateSpotRequestToEntity(updateSpotRequest, spot.User, spot.Images);
@@ -92,12 +95,12 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         var spot = spotRepository.Get(id);
         if (spot is null)
         {
-            throw new SpotNotFoundException("spot_not_found");
+            throw new SpotNotFoundException(_localizer["spot_not_found"]);
         }
 
         if (userId != spot.User.Id)
         {
-            throw new UserNotAuthorizedException("user_not_authorized_to_delete_spot");
+            throw new UserNotAuthorizedException(_localizer["user_not_authorized_to_delete_spot"]);
         }
     
         spot.Images.ForEach(fileService.DeleteFile);

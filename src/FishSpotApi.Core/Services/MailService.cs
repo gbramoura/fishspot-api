@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Net.Mail;
+using FishSpotApi.Domain.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class MailService(IConfiguration config)
+public class MailService(IConfiguration config, IStringLocalizerFactory factory)
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     public void SendRecoverPasswordMail(string email, string name, string code)
     {
         var smtpClient = new SmtpClient()
@@ -20,7 +23,7 @@ public class MailService(IConfiguration config)
         var mailMessage = new MailMessage()
         {
             From = new MailAddress(config["MailSettings:From"] ?? "", config["MailSettings:DisplayName"]),
-            Subject = "Password Recover",
+            Subject = _localizer["mail_subject"],
             Body = GetMailBody(code),
             IsBodyHtml = true
         };
@@ -31,10 +34,10 @@ public class MailService(IConfiguration config)
 
     private string GetMailBody(string code)
     {
-        var title = "Verification Code";
-        var description = "The FishSpot receive a request to use this email to change the password";
-        var codeDescription = "Use this code to change your password";
-        var warningDescription = "If you do not recognize this account in the establishment management system or did not request a password change, someone may be impersonating you";
+        var title = _localizer["mail_title"];
+        var description = _localizer["mail_description"];
+        var codeDescription = _localizer["mail_code_description"];
+        var warningDescription = _localizer["mail_warning_description"];
 
         var codes = string.Empty;
         var codeArray = code.ToCharArray();

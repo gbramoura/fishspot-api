@@ -102,4 +102,25 @@
     <data name="token_not_found" xml:space="preserve">
         <value>Token not found</value>
     </data>
+    <data name="mail_title" xml:space="preserve">
+        <value>Verification Code</value>
+    </data>
+    <data name="mail_description" xml:space="preserve">
+        <value>The FishSpot receive a request to use this email to change the password</value>
+    </data>
+    <data name="mail_code_description" xml:space="preserve">
+        <value>Use this code to change your password</value>
+    </data>
+    <data name="mail_warning_description" xml:space="preserve">
+        <value>If you do not recognize this account in the FishSpot system or did not request a password change, someone may be impersonating you</value>
+    </data>
+    <data name="mail_subject" xml:space="preserve">
+        <value>Password Recover</value>
+    </data>
+    <data name="resource_file_allowed" xml:space="preserve">
+        <value>Only {0} are allowed.</value>
+    </data>
+    <data name="resource_file_not_found" xml:space="preserve">
+        <value>File {0} not found</value>
+    </data>
 </root>

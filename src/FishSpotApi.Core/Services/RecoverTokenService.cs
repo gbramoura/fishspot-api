@@ -1,11 +1,15 @@
 using System.Text;
 using FishSpotApi.Core.Repository;
 using FishSpotApi.Domain.Entity;
+using FishSpotApi.Domain.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class RecoverTokenService(RecoverPasswordRepository recoverRepository)
+public class RecoverTokenService(RecoverPasswordRepository recoverRepository, IStringLocalizerFactory factory)
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
+    
     public string GenerateToken(string email)
     {
         var strBuilder = new StringBuilder();
@@ -52,7 +56,7 @@ public class RecoverTokenService(RecoverPasswordRepository recoverRepository)
 
         if (recoverToken is null)
         {
-            throw new Exception("token_not_found");
+            throw new Exception(_localizer["token_not_found"]);
         }
 
         recoverRepository.Delete(recoverToken.Id);

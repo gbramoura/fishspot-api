@@ -102,4 +102,25 @@
     <data name="token_not_found" xml:space="preserve">
         <value>Token não encontrado</value>
     </data>
+    <data name="mail_title" xml:space="preserve">
+        <value>Codigo de Verificação</value>
+    </data>
+    <data name="mail_description" xml:space="preserve">
+        <value>O FishSpot recebeu uma requisição para usar este email para alterar a senha do usuário</value>
+    </data>
+    <data name="mail_code_description" xml:space="preserve">
+        <value>Use esse codigo para mudar a sua senha</value>
+    </data>
+    <data name="mail_warning_description" xml:space="preserve">
+        <value>Se você não reconhece esta conta no FishSpot ou não solicitou uma alteração de senha, alguém pode estar se passando por você</value>
+    </data>
+    <data name="mail_subject" xml:space="preserve">
+        <value>Recuperação de Senha</value>
+    </data>
+    <data name="resource_file_allowed" xml:space="preserve">
+        <value>Apenas arquivos com extensão {0} são permitidos</value>
+    </data>
+    <data name="resource_file_not_found" xml:space="preserve">
+        <value>Arquivo {0} não encontrado</value>
+    </data>
 </root>

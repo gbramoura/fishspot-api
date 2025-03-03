@@ -1,8 +1,8 @@
-﻿using FishSpotApi.Application.Resources;
-using FishSpotApi.Core.Services;
+﻿using FishSpotApi.Core.Services;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http;
 using FishSpotApi.Domain.Http.Request;
+using FishSpotApi.Domain.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -11,7 +11,7 @@ namespace FishSpotApi.Application.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController(UserService userService, IStringLocalizer<Resources.Resources> localizer) : ControllerBase
+public class AuthController(UserService userService, IStringLocalizer<FishSpotResource> localizer) : ControllerBase
 {
     [HttpPost("register/")]
     [AllowAnonymous]
@@ -41,7 +41,7 @@ public class AuthController(UserService userService, IStringLocalizer<Resources.
         {
             http.Code = StatusCodes.Status500InternalServerError;
             http.Message = localizer["internal_server_error"];
-            http.Error = localizer[e.Message];
+            http.Error = e.Message;
             return StatusCode(http.Code, http);
         }
     }
@@ -68,12 +68,12 @@ public class AuthController(UserService userService, IStringLocalizer<Resources.
         }
         catch (UserNotFoundException e)
         {
-            http.Message = localizer[e.Message];;
+            http.Message = e.Message; ;
             return StatusCode(http.Code, http);
         }
         catch (IncorrectPasswordException e)
         {
-            http.Message = localizer[e.Message];;
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
@@ -120,7 +120,7 @@ public class AuthController(UserService userService, IStringLocalizer<Resources.
         }
         catch (RefreshTokenInvalidException e)
         {
-            http.Message = localizer[e.Message];;
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
@@ -152,7 +152,7 @@ public class AuthController(UserService userService, IStringLocalizer<Resources.
         }
         catch (UserNotFoundException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
@@ -189,7 +189,7 @@ public class AuthController(UserService userService, IStringLocalizer<Resources.
         }
         catch (UserNotFoundException e)
         {
-            http.Message = localizer[e.Message];;
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)
@@ -221,12 +221,12 @@ public class AuthController(UserService userService, IStringLocalizer<Resources.
         }
         catch (InvalidRecoverTokenException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (UserNotFoundException e)
         {
-            http.Message = localizer[e.Message];
+            http.Message = e.Message;
             return StatusCode(http.Code, http);
         }
         catch (Exception e)

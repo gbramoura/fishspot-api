@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FishSpotApi.Application.Resources {
+namespace FishSpotApi.Domain.Resources {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace FishSpotApi.Application.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources_pt_BR {
+    public class FishSpotResource_pt_BR {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources_pt_BR() {
+        internal FishSpotResource_pt_BR() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace FishSpotApi.Application.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FishSpotApi.Application.Resources.Resources.pt-BR", typeof(Resources_pt_BR).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FishSpotApi.Domain.Resources.FishSpotResource.pt-BR", typeof(FishSpotResource_pt_BR).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -83,6 +83,15 @@ namespace FishSpotApi.Application.Resources {
         public static string is_authenticated {
             get {
                 return ResourceManager.GetString("is_authenticated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Codigo de Verificação.
+        /// </summary>
+        public static string mail_verification_code {
+            get {
+                return ResourceManager.GetString("mail_verification_code", resourceCulture);
             }
         }
         

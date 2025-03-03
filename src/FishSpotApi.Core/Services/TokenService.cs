@@ -5,11 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FishSpotApi.Domain.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class TokenService(IConfiguration config, TokenRepository auth)
+public class TokenService(IConfiguration config, TokenRepository auth, IStringLocalizerFactory factory)
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     public string GenerateToken(IEnumerable<Claim> claims)
     {
         var key = Encoding.ASCII.GetBytes(config["Authentication:AccessTokenSecret"] ?? "");
@@ -41,7 +44,7 @@ public class TokenService(IConfiguration config, TokenRepository auth)
         if (securityToken is not JwtSecurityToken jwtSecurityToken ||
             !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
         {
-            throw new SecurityTokenException("token_invalid");
+            throw new SecurityTokenException(_localizer["token_invalid"]);
         }
 
         return principal;
