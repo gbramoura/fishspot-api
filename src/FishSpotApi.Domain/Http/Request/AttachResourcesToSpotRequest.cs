@@ -5,11 +5,10 @@ namespace FishSpotApi.Domain.Http.Request;
 
 public class AttachResourcesToSpotRequest
 {
-    [Required(ErrorMessage = "The files must be filled")]
-    [MinLength(1, ErrorMessage = "The minimum number of file must be at least one")]
-    [MaxLength(30, ErrorMessage = "The limit of files has been reached")]
+    [Required(ErrorMessage = "annotation_files_required")]
+    [MaxLength(30, ErrorMessage = "annotation_files_max_length")]
     public List<IFormFile> Files { get; set; }
     
-    [Required(ErrorMessage = "The spot unique identifier must be filled")]
+    [Required(ErrorMessage = "annotation_spot_required")]
     public string SpotId { get; set; }
 }

@@ -4,13 +4,12 @@ namespace FishSpotApi.Domain.Http.Request;
 
 public class RecoverTokenRequest
 {
-    [Required(ErrorMessage = "The token must be filled")]
-    [EmailAddress(ErrorMessage = "Token it not valid")]
-    [MaxLength(5, ErrorMessage = "The limit of characters 5 has been reached")]
+    [Required(ErrorMessage = "annotation_token_required")]
+    [MaxLength(5, ErrorMessage = "annotation_token_max_length")]
     public string Token { get; set; }
     
-    [Required(ErrorMessage = "The e-mail must be filled")]
-    [EmailAddress(ErrorMessage = "E-mail it not valid")]
-    [MaxLength(245, ErrorMessage = "The limit of characters 245 has been reached")]
+    [Required(ErrorMessage = "annotation_email_required")]
+    [EmailAddress(ErrorMessage = "annotation_email_validation")]
+    [MaxLength(245, ErrorMessage = "annotation_email_max_length")]
     public string Email { get; set; }
 }

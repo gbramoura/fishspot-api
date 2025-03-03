@@ -123,4 +123,97 @@
     <data name="resource_file_not_found" xml:space="preserve">
         <value>Arquivo {0} não encontrado</value>
     </data>
+    <data name="annotation_password_required" xml:space="preserve">
+        <value>A senha deve ser preenchida</value>
+    </data>
+    <data name="annotation_password_min_length" xml:space="preserve">
+        <value>A senha deve ter mais de 8 caracteres</value>
+    </data>
+    <data name="annotation_email_required" xml:space="preserve">
+        <value>O e-mail deve ser preenchido</value>
+    </data>
+    <data name="annotation_email_validation" xml:space="preserve">
+        <value>O e-mail não é válido</value>
+    </data>
+    <data name="annotation_email_max_length" xml:space="preserve">
+        <value>O limite de 245 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_name_required" xml:space="preserve">
+        <value>O campo nome deve ser preenchido</value>
+    </data>
+    <data name="annotation_name_max_length" xml:space="preserve">
+        <value>O limite de 245 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_token_required" xml:space="preserve">
+        <value>O token deve ser preenchido</value>
+    </data>
+    <data name="annotation_refresh_token_required" xml:space="preserve">
+        <value>O refresh token deve ser preenchido</value>
+    </data>
+    <data name="annotation_token_max_length" xml:space="preserve">
+        <value>O limite de 5 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_page_size_required" xml:space="preserve">
+        <value>O tamanho da página é obrigatório</value>
+    </data>
+    <data name="annotation_page_size_range" xml:space="preserve">
+        <value>O tamanho da página deve ser maior que 0</value>
+    </data>
+    <data name="annotation_page_number_required" xml:space="preserve">
+        <value>O número da página é obrigatório</value>
+    </data>
+    <data name="annotation_page_number_range" xml:space="preserve">
+        <value>O número da página deve ser maior que 0</value>
+    </data>
+    <data name="annotation_spot_required" xml:space="preserve">
+        <value>O identificador único do local deve ser preenchido</value>
+    </data>
+    <data name="annotation_files_required" xml:space="preserve">
+        <value>A lista de arquivos deve ser preenchida</value>
+    </data>
+    <data name="annotation_files_min_length" xml:space="preserve">
+        <value>O número mínimo de IDs de arquivo deve ser de pelo menos um</value>
+    </data>
+    <data name="annotation_new_password_required" xml:space="preserve">
+        <value>A nova senha deve ser preenchida</value>
+    </data>
+    <data name="annotation_files_max_length" xml:space="preserve">
+        <value>O limite de 30 arquivos foi atingido</value>
+    </data>
+    <data name="annotation_title_required" xml:space="preserve">
+        <value>O título deve ser preenchido</value>
+    </data>
+    <data name="annotation_observation_max_length" xml:space="preserve">
+        <value>O limite de 245 caracteres foi atingido</value>
+    </data>
+    <data name="annotation_coordinates_required" xml:space="preserve">
+        <value>As coordenadas devem ser preenchidas</value>
+    </data>
+    <data name="annotation_coordinates_max_length" xml:space="preserve">
+        <value>As coordenadas devem ter no máximo 2 caracteres</value>
+    </data>
+    <data name="annotation_coordinates_min_length" xml:space="preserve">
+        <value>As coordenadas devem ter pelo menos 2 caracteres</value>
+    </data>
+    <data name="annotation_fishs_min_length" xml:space="preserve">
+        <value>Comprimento mínimo de peixes obrigatório</value>
+    </data>
+    <data name="annotation_rate_required" xml:space="preserve">
+        <value>A taxa de dificuldade do local deve ser preenchida</value>
+    </data>
+    <data name="annotation_risk_required" xml:space="preserve">
+        <value>A taxa de risco do local deve ser preenchida</value>
+    </data>
+    <data name="annotation_weight_required" xml:space="preserve">
+        <value>O peso deve ser preenchido</value>
+    </data>
+    <data name="annotation_unit_measure_required" xml:space="preserve">
+        <value>A unidade de medida deve ser preenchida</value>
+    </data>
+    <data name="annotation_lures_min_length" xml:space="preserve">
+        <value>O número mínimo de iscas deve ser de pelo menos um</value>
+    </data>
+    <data name="annotation_lures_max_length" xml:space="preserve">
+        <value>O limite de iscas foi atingido</value>
+    </data>
 </root>

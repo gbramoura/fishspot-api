@@ -123,4 +123,97 @@
     <data name="resource_file_not_found" xml:space="preserve">
         <value>File {0} not found</value>
     </data>
+    <data name="annotation_password_required" xml:space="preserve">
+        <value>The password must be filled</value>
+    </data>
+    <data name="annotation_password_min_length" xml:space="preserve">
+        <value>The password must have more than 8 characters</value>
+    </data>
+    <data name="annotation_email_required" xml:space="preserve">
+        <value>The e-mail must be filled</value>
+    </data>
+    <data name="annotation_email_validation" xml:space="preserve">
+        <value>E-mail it not valid</value>
+    </data>
+    <data name="annotation_email_max_length" xml:space="preserve">
+        <value>The limit of characters 245 has been reached</value>
+    </data>
+    <data name="annotation_name_required" xml:space="preserve">
+        <value>The field name must be filled</value>
+    </data>
+    <data name="annotation_name_max_length" xml:space="preserve">
+        <value>The limit of characters 245 has been reached</value>
+    </data>
+    <data name="annotation_token_required" xml:space="preserve">
+        <value>The token must be filled</value>
+    </data>
+    <data name="annotation_refresh_token_required" xml:space="preserve">
+        <value>The refresh token must be filled</value>
+    </data>
+    <data name="annotation_token_max_length" xml:space="preserve">
+        <value>The limit of characters 5 has been reached</value>
+    </data>
+    <data name="annotation_page_size_required" xml:space="preserve">
+        <value>The page size is required</value>
+    </data>
+    <data name="annotation_page_size_range" xml:space="preserve">
+        <value>The page size must be higher than 0</value>
+    </data>
+    <data name="annotation_page_number_required" xml:space="preserve">
+        <value>The page number is required</value>
+    </data>
+    <data name="annotation_page_number_range" xml:space="preserve">
+        <value>The page number must be higher than 0</value>
+    </data>
+    <data name="annotation_spot_required" xml:space="preserve">
+        <value>The spot unique identifier must be filled</value>
+    </data>
+    <data name="annotation_files_required" xml:space="preserve">
+        <value>The list with file must be filled</value>
+    </data>
+    <data name="annotation_files_min_length" xml:space="preserve">
+        <value>The minimum number of file id must be at least one</value>
+    </data>
+    <data name="annotation_new_password_required" xml:space="preserve">
+        <value>The new password should be filled</value>
+    </data>
+    <data name="annotation_files_max_length" xml:space="preserve">
+        <value>The limit of 30 files has been reached</value>
+    </data>
+    <data name="annotation_title_required" xml:space="preserve">
+        <value>The title must be filled</value>
+    </data>
+    <data name="annotation_observation_max_length" xml:space="preserve">
+        <value>The limit of characters 245 has been reached</value>
+    </data>
+    <data name="annotation_coordinates_required" xml:space="preserve">
+        <value>The coordinates must be filled</value>
+    </data>
+    <data name="annotation_coordinates_max_length" xml:space="preserve">
+        <value>The coordinates must be at most 2 characters long</value>
+    </data>
+    <data name="annotation_coordinates_min_length" xml:space="preserve">
+        <value>The coordinates must be at least 2 characters long</value>
+    </data>
+    <data name="annotation_fishs_min_length" xml:space="preserve">
+        <value>Minimum length of fishes required</value>
+    </data>
+    <data name="annotation_rate_required" xml:space="preserve">
+        <value>The location difficulty rate must be filled</value>
+    </data>
+    <data name="annotation_risk_required" xml:space="preserve">
+        <value>The location risk rate must be filled</value>
+    </data>
+    <data name="annotation_weight_required" xml:space="preserve">
+        <value>The weight must be filled</value>
+    </data>
+    <data name="annotation_unit_measure_required" xml:space="preserve">
+        <value>The unit measure must be filled</value>
+    </data>
+    <data name="annotation_lures_min_length" xml:space="preserve">
+        <value>The minimum number of lures must be at least one</value>
+    </data>
+    <data name="annotation_lures_max_length" xml:space="preserve">
+        <value>The limit of lures has been reached</value>
+    </data>
 </root>

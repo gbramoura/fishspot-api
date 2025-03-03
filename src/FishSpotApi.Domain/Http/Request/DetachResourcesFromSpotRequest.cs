@@ -4,10 +4,10 @@ namespace FishSpotApi.Domain.Http.Request;
 
 public class DetachResourcesFromSpotRequest 
 {
-    [Required(ErrorMessage = "The spot unique identifier must be filled")]
+    [Required(ErrorMessage = "annotation_spot_required")]
     public string SpotId { get; set; }
     
-    [Required(ErrorMessage = "The list with file must be filled")]
-    [MinLength(1, ErrorMessage = "The minimum number of file id must be at least one")]
+    [Required(ErrorMessage = "annotation_files_required")]
+    [MinLength(1, ErrorMessage = "annotation_files_min_length")]
     public List<string> Files { get; set; }
 }

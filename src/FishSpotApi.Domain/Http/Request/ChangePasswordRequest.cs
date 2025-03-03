@@ -4,14 +4,14 @@ namespace FishSpotApi.Domain.Http.Request;
 
 public class ChangePasswordRequest
 {
-    [Required(ErrorMessage = "The e-mail must be filled")]
-    [EmailAddress(ErrorMessage = "E-mail it not valid")]
-    [MaxLength(245, ErrorMessage = "The limit of characters 245 has been reached")]
+    [Required(ErrorMessage = "annotation_email_required")]
+    [EmailAddress(ErrorMessage = "annotation_email_validation")]
+    [MaxLength(245, ErrorMessage = "annotation_email_max_length")]
     public string Email { get; set; }
 
-    [Required(ErrorMessage = "The validation token should be filled")]
+    [Required(ErrorMessage = "annotation_token_required")]
     public string Token { get; set; }
 
-    [Required(ErrorMessage = "The new password should be filled")]
+    [Required(ErrorMessage = "annotation_new_password_required")]
     public string NewPassword { get; set; }
 }

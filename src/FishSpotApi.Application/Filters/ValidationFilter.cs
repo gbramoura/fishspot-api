@@ -1,12 +1,16 @@
 using FishSpotApi.Domain.Http;
+using FishSpotApi.Domain.Resources;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Application.Filters;
 
-public class ValidationFilter : Attribute, IActionFilter
+public class ValidationFilter(IStringLocalizerFactory factory) : Attribute, IActionFilter
 {
+    private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
+    
     public void OnActionExecuting(ActionExecutingContext context)
     {
         if (context.ModelState.IsValid)
@@ -30,7 +34,7 @@ public class ValidationFilter : Attribute, IActionFilter
         // OnActionExecuted method not used
     }
     
-    private static List<ErrorResponse> ErrorConverter(ModelStateDictionary model) 
+    private List<ErrorResponse> ErrorConverter(ModelStateDictionary model) 
     {
         if (model.ErrorCount <= 0) 
         {
@@ -40,16 +44,11 @@ public class ValidationFilter : Attribute, IActionFilter
         var errors = new List<ErrorResponse>();
         foreach (var (field, value) in model) 
         {
-            var message = string.Empty;
-            foreach (var error in value.Errors) 
-            {
-                message = error.ErrorMessage;
-            }
-
+            var error = value.Errors.FirstOrDefault();
             errors.Add(new ErrorResponse() 
             {
                 Field = field,
-                Message = message 
+                Message = _localizer[error?.ErrorMessage ?? string.Empty] , 
             });
         }
 

@@ -4,11 +4,11 @@ namespace FishSpotApi.Domain.Http.Request;
 
 public class ListRequest
 {
-    [Required(ErrorMessage = "The page size is required")]
-    [Range(1, int.MaxValue, ErrorMessage = "The page size must be higher than 0")]
+    [Required(ErrorMessage = "annotation_page_size_required")]
+    [Range(1, int.MaxValue, ErrorMessage = "annotation_page_size_range")]
     public int PageSize { get; set; }
         
-    [Required(ErrorMessage = "The page number is required")]
-    [Range(1, int.MaxValue, ErrorMessage = "The page number must be higher than 0")]
+    [Required(ErrorMessage = "annotation_page_number_required")]
+    [Range(1, int.MaxValue, ErrorMessage = "annotation_page_number_range")]
     public int PageNumber { get; set; }
 }

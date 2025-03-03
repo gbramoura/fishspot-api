@@ -4,9 +4,9 @@ namespace FishSpotApi.Domain.Http.Request;
 
 public class RefreshTokenRequest
 {
-    [Required(ErrorMessage = "The token must be filled")]
+    [Required(ErrorMessage = "annotation_token_required")]
     public string Token { get; set; }
 
-    [Required(ErrorMessage = "The refresh token must be filled")]
+    [Required(ErrorMessage = "annotation_refresh_token_required")]
     public string RefreshToken { get; set; }
 }
