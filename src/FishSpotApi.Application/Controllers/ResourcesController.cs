@@ -1,3 +1,4 @@
+using FishSpotApi.Core.Extension;
 using FishSpotApi.Core.Services;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http;
@@ -104,6 +105,45 @@ public class ResourcesController(ResourcesService resourcesService, IStringLocal
             return StatusCode(http.Code, http);
         }
         catch (SpotNotFoundException e)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (Exception e)
+        {
+            http.Code = StatusCodes.Status500InternalServerError;
+            http.Message = localizer["internal_server_error"];
+            http.Error = e.Message;
+            return StatusCode(http.Code, http);
+        }
+    }
+    
+    [HttpPost("/attach-to-user")]
+    [Authorize(Roles = "user")]
+    public ActionResult<DefaultResponse> AttachResourcesToSpot([FromForm] AttachResourceToUserRequest request)
+    {
+        var http = new DefaultResponse()
+        {
+            Code = StatusCodes.Status400BadRequest,
+            Message = localizer["unauthorized"]
+        };
+
+        try
+        {
+            var userId = User?.Identity?.GetUserId();
+            var resource = resourcesService.AttachUserResource(request, userId);
+
+            http.Message = localizer["resource_attached_to_user"];
+            http.Code = StatusCodes.Status200OK;
+            http.Response = resource;
+            return http;
+        }
+        catch (UserNotFoundException e)
+        {
+            http.Message = e.Message;
+            return StatusCode(http.Code, http);
+        }
+        catch (InvalidImageException e)
         {
             http.Message = e.Message;
             return StatusCode(http.Code, http);

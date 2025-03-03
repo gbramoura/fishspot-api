@@ -243,4 +243,10 @@
     <data name="user_updated_successfully" xml:space="preserve">
         <value>User updated successfully</value>
     </data>
+    <data name="resource_attached_to_user" xml:space="preserve">
+        <value>The resource was attached to user</value>
+    </data>
+    <data name="annotation_user_file_required" xml:space="preserve">
+        <value>The file must be filled</value>
+    </data>
 </root>

@@ -1,3 +1,4 @@
+using FishSpotApi.Core.Mapper;
 using FishSpotApi.Core.Repository;
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http.Request;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class ResourcesService(SpotRepository spotRepository, FileService fileService, IStringLocalizerFactory factory)
+public class ResourcesService(SpotRepository spotRepository, UserRepository userRepository,FileService fileService, IStringLocalizerFactory factory)
 {
     private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     private readonly List<string> _allowedFileExtensions = [".jpg", ".jpeg", ".png"];
@@ -78,6 +79,30 @@ public class ResourcesService(SpotRepository spotRepository, FileService fileSer
         {
             spot.Images = spot.Images.Where(img => !deletedFiles.Contains(img)).ToList();
             spotRepository.Update(spot);
+        }
+    }
+
+    public string AttachUserResource(AttachResourceToUserRequest attachRequest, string userId)
+    {
+        var user = userRepository.Get(userId);
+        if (user is null)
+        {
+            throw new UserNotFoundException(_localizer["user_not_found"]);
+        }
+        
+        var savedFile = string.Empty;
+        try
+        {
+            savedFile = fileService.SaveFile(attachRequest.File, _allowedFileExtensions);
+            user.Image = savedFile;
+            
+            userRepository.Update(user);
+            return savedFile;
+        }
+        catch (Exception e)
+        {
+            fileService.DeleteFile(savedFile);
+            throw new InvalidImageException(_localizer["resource_unable_to_save"], e); 
         }
     }
 }
