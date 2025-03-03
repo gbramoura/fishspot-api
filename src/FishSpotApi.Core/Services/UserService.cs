@@ -6,6 +6,7 @@ using FishSpotApi.Domain.Http.Request;
 using FishSpotApi.Domain.Http.Response;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using FishSpotApi.Core.Mapper;
 using FishSpotApi.Domain.Resources;
 using Microsoft.Extensions.Localization;
@@ -18,11 +19,17 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
     
     public void RegisterUser(UserRegisterRequest payload)
     {
+        var username = GenerateUsername(payload.Name);
+        while (!IsUniqueUsername(username))
+        {
+            username = GenerateUsername(payload.Name);
+        }
+            
         userRepository.Insert(new UserEntity
         {
             Email = payload.Email,
             Name = payload.Name,
-            Username = GenerateUsername(payload.Name, payload.Email),
+            Username = username,
             Description = _localizer["user_default_description"],
             Password = PasswordUtils.EncryptPassword(payload.Password),
             UniqueIdentifierToken = Guid.NewGuid().ToString()
@@ -53,6 +60,8 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
     }
     
     public bool IsUniqueEmail(string email) => userRepository.GetByEmail(email).Any();
+
+    public bool IsUniqueUsername(string username) => userRepository.GetByUsername(username).Any();
 
     public UserLoginResponse LoginUser(UserLoginRequest payload)
     {
@@ -156,9 +165,25 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
         return recoverTokenService.VerifyToken(payload.Token, payload.Email);
     }
 
-    private string GenerateUsername(String name, String email)
+    private string GenerateUsername(string name)
     {
-        // TODO: create the generator username
-        return name;
+        var splittedName = name.Split(' ');
+        var firstName = Regex.Replace(splittedName[0].ToLower(), "[^a-z]", "");
+        var lastName = Regex.Replace(splittedName[splittedName.Length - 1].ToLower(), "[^a-z]", "");
+
+        var username = $"{firstName}{lastName}";
+        if (username.Length > 15)
+        {
+            username = username.Substring(0, 15);
+        }
+        
+        var random = new Random();
+        var numbers = string.Empty;
+        for (var i = 0; i < 4; i++)
+        {
+            numbers += random.Next(0, 10);
+        }
+
+        return $"{username}{numbers}";
     }
 }

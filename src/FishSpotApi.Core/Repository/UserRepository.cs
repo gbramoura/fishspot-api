@@ -9,7 +9,14 @@ public class UserRepository(FishSpotApiContext mongo) : BaseRepository<UserEntit
     public List<UserEntity> GetByEmail(string email)
     {
         var filter = Builders<UserEntity>.Filter.Eq(entity => entity.Email, email);
-        var token = _db.Find(filter).ToList();
-        return token;
+        var list = _db.Find(filter).ToList();
+        return list;
+    }
+    
+    public List<UserEntity> GetByUsername(string username)
+    {
+        var filter = Builders<UserEntity>.Filter.Eq(entity => entity.Username, username);
+        var list = _db.Find(filter).ToList();
+        return list;
     }
 }
