@@ -118,8 +118,8 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
 
         return new RefreshTokenResponse
         {
-            RefreshToken = newJwtToken,
-            Token = newRefreshToken
+            RefreshToken = newRefreshToken,
+            Token = newJwtToken
         };
     }
 
