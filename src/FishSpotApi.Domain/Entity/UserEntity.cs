@@ -24,7 +24,7 @@ public class UserEntity : BaseEntity
     public string Image { get; set; }
     
     [BsonElement("address")]
-    public UserAddress Address { get; set; }
+    public UserAddress? Address { get; set; }
     
     [BsonElement("Unique_identifier_token")]
     public string UniqueIdentifierToken { get; set; }

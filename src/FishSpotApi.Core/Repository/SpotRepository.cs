@@ -1,4 +1,5 @@
-﻿using FishSpotApi.Data.Context;
+﻿using FishSpotApi.Core.Utils;
+using FishSpotApi.Data.Context;
 using FishSpotApi.Domain.Entity;
 using FishSpotApi.Domain.Projection;
 using MongoDB.Driver;
@@ -46,5 +47,34 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
             .ToList();
 
         return locations;
+    }
+
+    public SpotDetailsProjection GetSpotDetailsByUser(string userId)
+    {
+        var filter = Builders<SpotEntity>.Filter.Eq(entity => entity.User.Id, userId);
+        var projection = Builders<SpotEntity>.Projection
+            .Include(entity => entity.Fishes);
+
+        var spotsCount = _db.Find(filter).CountDocuments();
+        var fishesCount = _db.Find(filter)
+            .Project(projection)
+            .ToList()
+            .SelectMany(entity => MongoJsonUtils.GetListOfBsonDocuments(entity, "fishes"))
+            .Select(entity => entity.GetValue("name").AsString)
+            .ToList().Distinct().Count();
+        
+        var luresCount = _db.Find(filter)
+            .Project(projection)
+            .ToList()
+            .SelectMany(entity => MongoJsonUtils.GetListOfBsonDocuments(entity, "fishes"))
+            .SelectMany(entity => entity.GetValue("lures").AsBsonArray.Select(p => p.AsString))
+            .ToList().Distinct().Count();
+        
+        return new SpotDetailsProjection()
+        {
+            Registries = Convert.ToInt32(spotsCount),
+            Fishes = fishesCount,
+            Lures = luresCount,
+        };
     }
 }

@@ -2,6 +2,7 @@ using FishSpotApi.Domain.Entity;
 using FishSpotApi.Domain.Entity.Objects;
 using FishSpotApi.Domain.Http.Request;
 using FishSpotApi.Domain.Http.Response;
+using FishSpotApi.Domain.Projection;
 
 namespace FishSpotApi.Core.Mapper;
 
@@ -11,10 +12,10 @@ public class UserMapper
     {
         var address = new UserAddressResponse()
         {
-            Neighborhood = userEntity.Address.Neighborhood,
-            Street = userEntity.Address.Street,
-            Number = userEntity.Address.Number,
-            ZipCode = userEntity.Address.ZipCode,
+            Neighborhood = userEntity.Address?.Neighborhood ?? string.Empty,
+            Street = userEntity.Address?.Street ?? string.Empty,
+            Number = userEntity.Address?.Number ?? 0,
+            ZipCode = userEntity.Address?.ZipCode ?? string.Empty,
         };
         
         return new UserResponse()
@@ -26,6 +27,18 @@ public class UserMapper
             Image = userEntity.Image,
             Address = address
         };
+    }
+
+    public static UserResponse SpotDetailsToUserResponse(SpotDetailsProjection spotDetails, UserResponse userResponse)
+    {
+        userResponse.SpotDetails = new UserSpotDetailsResponse()
+        {
+            Fishes = spotDetails.Fishes,
+            Lures = spotDetails.Lures,
+            Registries = spotDetails.Registries,
+        };
+        
+        return userResponse;
     }
 
     public static UserEntity UserUpdateRequestToUserEntity(UserEntity user, UserUpdateRequest update)

@@ -13,7 +13,13 @@ using Microsoft.Extensions.Localization;
 
 namespace FishSpotApi.Core.Services;
 
-public class UserService(UserRepository userRepository, TokenService tokenService, MailService mailService, RecoverTokenService recoverTokenService, IStringLocalizerFactory factory)
+public class UserService(
+    UserRepository userRepository,
+    SpotRepository spotRepository,
+    TokenService tokenService, 
+    MailService mailService, 
+    RecoverTokenService recoverTokenService, 
+    IStringLocalizerFactory factory)
 {
     private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
     
@@ -44,7 +50,11 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
             throw new SpotNotFoundException(_localizer["user_not_found"]);
         }
         
-        return UserMapper.UserEntityToUserResponse(user);
+        var details = spotRepository.GetSpotDetailsByUser(userId);
+        
+        var mappedUser = UserMapper.UserEntityToUserResponse(user);
+        var filledUser = UserMapper.SpotDetailsToUserResponse(details, mappedUser);
+        return filledUser;
     }
 
     public void UpdateUser(UserUpdateRequest payload, string userId)
@@ -61,7 +71,7 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
     
     public bool IsUniqueEmail(string email) => userRepository.GetByEmail(email).Any();
 
-    public bool IsUniqueUsername(string username) => userRepository.GetByUsername(username).Any();
+    public bool IsUniqueUsername(string username) => !userRepository.GetByUsername(username).Any();
 
     public UserLoginResponse LoginUser(UserLoginRequest payload)
     {
@@ -168,10 +178,15 @@ public class UserService(UserRepository userRepository, TokenService tokenServic
     private string GenerateUsername(string name)
     {
         var splittedName = name.Split(' ');
-        var firstName = Regex.Replace(splittedName[0].ToLower(), "[^a-z]", "");
-        var lastName = Regex.Replace(splittedName[splittedName.Length - 1].ToLower(), "[^a-z]", "");
+        var firstname = Regex.Replace(splittedName[0].ToLower(), "[^a-z]", "");
+        var lastname = string.Empty;
 
-        var username = $"{firstName}{lastName}";
+        if (splittedName.Length > 1)
+        {
+            lastname = Regex.Replace(splittedName[^1].ToLower(), "[^a-z]", "");
+        }
+
+        var username = $"{firstname}{lastname}";
         if (username.Length > 15)
         {
             username = username.Substring(0, 15);
