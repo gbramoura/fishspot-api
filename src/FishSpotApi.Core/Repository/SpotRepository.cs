@@ -21,6 +21,7 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
             .Select(entity => new SpotLocationProjection
             {
                 Id = entity.GetValue("_id").AsObjectId.ToString(),
+                Title = entity.GetValue("title").AsObjectId.ToString(),
                 Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble).ToList()
             })
             .ToList();
@@ -42,6 +43,7 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
             .Select(entity => new SpotLocationProjection
             {
                 Id = entity.GetValue("_id").AsObjectId.ToString(),
+                Title = entity.GetValue("title").AsObjectId.ToString(),
                 Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble).ToList()
             })
             .ToList();

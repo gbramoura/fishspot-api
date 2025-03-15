@@ -55,6 +55,7 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         var response = locations.Select(location => new SpotLocationResponse
         {
             Id = location.Id,
+            Title = location.Title,
             Coordinates = location.Coordinates
         });
 
@@ -67,6 +68,7 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         var response = locations.Select(location => new SpotLocationResponse
         {
             Id = location.Id,
+            Title = location.Title,
             Coordinates = location.Coordinates
         });
 
