@@ -47,7 +47,7 @@ public class UserService(
         var user = userRepository.Get(userId);
         if (user is null)
         {
-            throw new SpotNotFoundException(_localizer["user_not_found"]);
+            throw new UserNotFoundException(_localizer["user_not_found"]);
         }
         
         var details = spotRepository.GetSpotDetailsByUser(userId);
@@ -62,7 +62,12 @@ public class UserService(
         var user = userRepository.Get(userId);
         if (user is null)
         {
-            throw new SpotNotFoundException(_localizer["user_not_found"]);
+            throw new UserNotFoundException(_localizer["user_not_found"]);
+        }
+
+        if (user.Username != payload.Username && !IsUniqueUsername(user.Username))
+        {
+            throw new UserNotFoundException(_localizer["user_username_in_use"]);
         }
         
         var userEntity = UserMapper.UserUpdateRequestToUserEntity(user, payload);
