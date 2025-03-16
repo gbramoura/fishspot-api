@@ -62,13 +62,14 @@ public class SpotService(SpotRepository spotRepository, UserRepository userRepos
         return response;
     }
     
-    public IEnumerable<SpotLocationResponse> GetUserLocations(string userId, ListRequest listRequest)
+    public IEnumerable<SpotUserLocationResponse> GetUserLocations(string userId, ListRequest listRequest)
     {
         var locations = spotRepository.GetUserLocations(userId, listRequest.PageSize, listRequest.PageNumber);
-        var response = locations.Select(location => new SpotLocationResponse
+        var response = locations.Select(location => new SpotUserLocationResponse
         {
             Id = location.Id,
             Title = location.Title,
+            Image = location.Image,
             Coordinates = location.Coordinates
         });
 

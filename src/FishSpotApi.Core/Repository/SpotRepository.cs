@@ -13,7 +13,8 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
         // TODO: Make a huge filter about the location near to the x and y provided
         var filter = Builders<SpotEntity>.Filter.Empty;
         var projection = Builders<SpotEntity>.Projection
-            .Include(entity => entity.Coordinates);
+            .Include(entity => entity.Coordinates)
+            .Include(entity => entity.Title);
 
         var locations = _db.Find(filter)
             .Project(projection)
@@ -21,7 +22,7 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
             .Select(entity => new SpotLocationProjection
             {
                 Id = entity.GetValue("_id").AsObjectId.ToString(),
-                Title = entity.GetValue("title").AsObjectId.ToString(),
+                Title = entity.GetValue("title").AsString,
                 Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble).ToList()
             })
             .ToList();
@@ -29,21 +30,24 @@ public class SpotRepository(FishSpotApiContext mongo) : BaseRepository<SpotEntit
         return locations;
     }
     
-    public List<SpotLocationProjection> GetUserLocations(string userId, int pageSize, int pageNumber)
+    public List<SpotUserLocationProjection> GetUserLocations(string userId, int pageSize, int pageNumber)
     {
         var filter = Builders<SpotEntity>.Filter.Eq(entity => entity.User.Id, userId);
         var projection = Builders<SpotEntity>.Projection
-            .Include(entity => entity.Coordinates);
+            .Include(entity => entity.Coordinates)
+            .Include(entity => entity.Title)
+            .Include(entity => entity.Images);
 
         var locations = _db.Find(filter)
             .Skip((pageNumber-1) * pageSize)
             .Limit(pageSize)
             .Project(projection)
             .ToEnumerable()
-            .Select(entity => new SpotLocationProjection
+            .Select(entity => new SpotUserLocationProjection
             {
                 Id = entity.GetValue("_id").AsObjectId.ToString(),
-                Title = entity.GetValue("title").AsObjectId.ToString(),
+                Title = entity.GetValue("title").AsString,
+                Image = entity.GetValue("images").AsBsonArray.Select(p => p.AsString).FirstOrDefault() ?? string.Empty,
                 Coordinates = entity.GetValue("coordinates").AsBsonArray.Select(p => p.AsDouble).ToList()
             })
             .ToList();
