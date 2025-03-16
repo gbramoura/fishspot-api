@@ -15,7 +15,6 @@ namespace FishSpotApi.Application.Controllers;
 public class ResourcesController(ResourcesService resourcesService, IStringLocalizer<FishSpotResource> localizer) : ControllerBase
 {
     [HttpGet("{id}")]
-    [Authorize(Roles = "user")]
     public IActionResult GetResource(string id)
     {
         var http = new DefaultResponse()
@@ -43,7 +42,7 @@ public class ResourcesController(ResourcesService resourcesService, IStringLocal
         }
     }
 
-    [HttpPost("/attach-to-spot")]
+    [HttpPost("attach-to-spot")]
     [Authorize(Roles = "user")]
     public ActionResult<DefaultResponse> AttachResourcesToSpot([FromForm] AttachResourcesToSpotRequest request)
     {
@@ -81,7 +80,7 @@ public class ResourcesController(ResourcesService resourcesService, IStringLocal
         }
     }
 
-    [HttpPost("/detach-to-spot")]
+    [HttpPost("detach-to-spot")]
     [Authorize(Roles = "user")]
     public ActionResult<DefaultResponse> DetachResourcesToSpot([FromForm] DetachResourcesFromSpotRequest request)
     {
@@ -118,7 +117,7 @@ public class ResourcesController(ResourcesService resourcesService, IStringLocal
         }
     }
     
-    [HttpPost("/attach-to-user")]
+    [HttpPost("attach-to-user")]
     [Authorize(Roles = "user")]
     public ActionResult<DefaultResponse> AttachResourcesToSpot([FromForm] AttachResourceToUserRequest request)
     {
