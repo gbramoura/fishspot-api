@@ -43,22 +43,26 @@ public class UserMapper
 
     public static UserEntity UserUpdateRequestToUserEntity(UserEntity user, UserUpdateRequest update)
     {
-        var address = new UserAddress()
+        var address = new UserAddress();
+        if (update.Address != null)
         {
-            Number = update.Address.Number,
-            Neighborhood = update.Address.Neighborhood,
-            Street = update.Address.Street,
-            ZipCode = update.Address.ZipCode,
-        };
-
+            address.Neighborhood = update.Address.Neighborhood;
+            address.Street = update.Address.Street;
+            address.Number = update.Address.Number;
+            address.ZipCode = update.Address.ZipCode;
+        }
+        
         return new UserEntity()
         {
+            Id = user.Id,
+            Password = user.Password,
             Name = update.Name,
             Description = update.Description,
             Username = update.Username ?? user.Username,
             Image = user.Image,
+            UniqueIdentifierToken = user.UniqueIdentifierToken,
             Email = user.Email,
-            Address = update.Address != null ? user.Address : address,
+            Address = address,
         };
     }
 }

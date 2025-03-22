@@ -13,7 +13,7 @@ public class UserUpdateRequest
     public string Description { get; set; }
     
     [MaxLength(20, ErrorMessage = "annotation_username_max_length")]
-    public string? Username { get; set; }
+    public string Username { get; set; }
     
     public UserAddressRequest? Address { get; set; }
 }

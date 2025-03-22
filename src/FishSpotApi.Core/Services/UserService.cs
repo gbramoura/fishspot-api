@@ -65,7 +65,7 @@ public class UserService(
             throw new UserNotFoundException(_localizer["user_not_found"]);
         }
 
-        if (user.Username != payload.Username && !IsUniqueUsername(user.Username))
+        if (user.Username != payload.Username && !IsUniqueUsername(payload.Username))
         {
             throw new UserNotFoundException(_localizer["user_username_in_use"]);
         }
