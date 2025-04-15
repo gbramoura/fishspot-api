@@ -37,6 +37,7 @@ public static class SpotMapper
             Observation = createSpotRequest.Observation,
             Coordinates = createSpotRequest.Coordinates,
             LocationDifficulty = difficulty,
+            Date = createSpotRequest.Date,
         };
     }
 
@@ -70,6 +71,7 @@ public static class SpotMapper
             Title = updateSpotRequest.Title,
             Observation = updateSpotRequest.Observation,
             Coordinates = updateSpotRequest.Coordinates,
+            Date = updateSpotRequest.Date,
         };
     }
     

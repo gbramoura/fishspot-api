@@ -14,6 +14,9 @@ public class CreateSpotRequest
     [MaxLength(245, ErrorMessage = "annotation_observation_max_length")]
     public string Observation { get; set; }
     
+    [Required(ErrorMessage = "annotation_date_required")]
+    public DateTime Date { get; set; }
+    
     [Required(ErrorMessage = "annotation_coordinates_required")]
     [MinLength(2, ErrorMessage = "annotation_coordinates_min_length")]
     [MaxLength(2, ErrorMessage = "annotation_coordinates_max_length")]

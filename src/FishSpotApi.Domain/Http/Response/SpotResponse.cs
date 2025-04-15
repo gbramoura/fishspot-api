@@ -6,6 +6,7 @@ public class SpotResponse
 {
     public string Title { get; set; }
     public string Observation { get; set; }
+    public DateTime Date { get; set; }
     public List<double> Coordinates { get; set; }
     public SpotRateResponse LocationDifficulty { get; set; }
     public SpotRateResponse LocationRisk { get; set; }

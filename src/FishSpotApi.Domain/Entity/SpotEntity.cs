@@ -10,6 +10,9 @@ public class SpotEntity : BaseEntity
 
     [BsonElement("observation")]
     public string Observation { get; set; }
+    
+    [BsonElement("date")]
+    public DateTime Date { get; set; }
 
     [BsonElement("coordinates")]
     public List<double> Coordinates { get; set; }
