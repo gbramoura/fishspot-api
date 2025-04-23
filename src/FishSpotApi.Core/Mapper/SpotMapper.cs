@@ -104,6 +104,7 @@ public static class SpotMapper
             LocationRisk = difficulty,
             LocationDifficulty = risk,
             Fishes = fishes,
+            Date = spot.Date,
             User = new SpotUserResponse()
             {
                 Name = spot.User.Name,
