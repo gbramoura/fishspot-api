@@ -2,6 +2,7 @@
 using FishSpotApi.Domain.Exception;
 using FishSpotApi.Domain.Http;
 using FishSpotApi.Domain.Http.Request;
+using FishSpotApi.Domain.Http.Response;
 using FishSpotApi.Domain.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -176,15 +177,15 @@ public class AuthController(UserService userService, IStringLocalizer<FishSpotRe
 
         try
         {
-            if (userService.ValidateRecoverToken(payload))
-            {
-                http.Message = localizer["token_valid"];
-                http.Code = StatusCodes.Status200OK;
-                return StatusCode(http.Code, http);
-            }
-
-            http.Message = localizer["token_invalid"];
+            var isValid = userService.ValidateRecoverToken(payload);
+            
+            http.Message = isValid ? localizer["token_valid"] : localizer["token_invalid"];
             http.Code = StatusCodes.Status200OK;
+            http.Response = new RecoverTokenResponse()
+            {
+                IsValid = isValid,
+            };
+            
             return StatusCode(http.Code, http);
         }
         catch (UserNotFoundException e)
