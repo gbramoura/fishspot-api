@@ -158,7 +158,7 @@ public class UserService(
             throw new UserNotFoundException(_localizer["user_not_found"]);
         }
 
-        if (recoverTokenService.VerifyToken(payload.Token, payload.Email))
+        if (!recoverTokenService.VerifyToken(payload.Token, payload.Email))
         {
             throw new InvalidRecoverTokenException(_localizer["token_invalid"]);
         }

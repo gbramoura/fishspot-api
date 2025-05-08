@@ -27,7 +27,7 @@ public class RecoverTokenService(RecoverPasswordRepository recoverRepository, IS
         {
             Email = email,
             Token = strBuilder.ToString(),
-            ExpirationDate = DateTime.Now.AddDays(1)
+            ExpirationDate = DateTime.UtcNow.AddMinutes(5),
         });
 
         return strBuilder.ToString();
@@ -35,19 +35,18 @@ public class RecoverTokenService(RecoverPasswordRepository recoverRepository, IS
 
     public bool VerifyToken(string token, string email)
     {
-        var recoverToken = recoverRepository.GetByTokenAndEmail(token, email);
-        var date = DateTime.Now;
+        var entity = recoverRepository.GetByTokenAndEmail(token, email);
+        var date = DateTime. UtcNow;
 
-        if (recoverToken is null)
+        if (entity is null)
         {
             return false;
         }
 
-        var isRecoverTokenValid =
-            recoverToken.ExpirationDate < date.AddMinutes(-5) &&
-            recoverToken.ExpirationDate > date.AddMinutes(5);
-
-        return isRecoverTokenValid;
+        var minusFiveMinutes = date.AddMinutes(-5);
+        var plusFiveMinutes = date.AddMinutes(5);
+        
+        return entity.ExpirationDate >= minusFiveMinutes && entity.ExpirationDate <= plusFiveMinutes;
     }
     
     public void DeleteToken(string token, string email)

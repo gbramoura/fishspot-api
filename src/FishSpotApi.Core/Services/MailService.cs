@@ -8,6 +8,7 @@ namespace FishSpotApi.Core.Services;
 public class MailService(IConfiguration config, IStringLocalizerFactory factory)
 {
     private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
+
     public void SendRecoverPasswordMail(string email, string name, string code)
     {
         var smtpClient = new SmtpClient()
