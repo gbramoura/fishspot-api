@@ -10,7 +10,7 @@ namespace FishSpotApi.Application.Filters;
 public class ValidationFilter(IStringLocalizerFactory factory) : Attribute, IActionFilter
 {
     private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
-    
+
     public void OnActionExecuting(ActionExecutingContext context)
     {
         if (context.ModelState.IsValid)
@@ -22,10 +22,10 @@ public class ValidationFilter(IStringLocalizerFactory factory) : Attribute, IAct
         var http = new DefaultResponse()
         {
             Code = StatusCodes.Status400BadRequest,
-            Message = "Don't authorized",
+            Message = _localizer["unauthorized"],
             Error = errors
         };
-        
+
         context.Result = new BadRequestObjectResult(http);
     }
 
@@ -33,22 +33,22 @@ public class ValidationFilter(IStringLocalizerFactory factory) : Attribute, IAct
     {
         // OnActionExecuted method not used
     }
-    
-    private List<ErrorResponse> ErrorConverter(ModelStateDictionary model) 
+
+    private List<ErrorResponse> ErrorConverter(ModelStateDictionary model)
     {
-        if (model.ErrorCount <= 0) 
+        if (model.ErrorCount <= 0)
         {
             return [];
         }
 
         var errors = new List<ErrorResponse>();
-        foreach (var (field, value) in model) 
+        foreach (var (field, value) in model)
         {
             var error = value.Errors.FirstOrDefault();
-            errors.Add(new ErrorResponse() 
+            errors.Add(new ErrorResponse()
             {
                 Field = field,
-                Message = _localizer[error?.ErrorMessage ?? string.Empty] , 
+                Message = _localizer[error?.ErrorMessage ?? string.Empty],
             });
         }
 
