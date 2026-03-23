@@ -13,7 +13,6 @@ public static class CoreDependency
     /// <param name="services">Extesion of IServiceCollection</param>
     public static void AddCoreDependency(this IServiceCollection services)
     {
-        services.AddDataDependency();
         services.AddScoped<TokenRepository>();
         services.AddScoped<UserRepository>();
         services.AddScoped<RecoverPasswordRepository>();

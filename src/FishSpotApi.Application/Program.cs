@@ -8,6 +8,7 @@ using FishSpotApi.Application.ConfigurationExtension;
 using FishSpotApi.Application.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Localization;
+using FishSpotApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddControllers(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDatabaseDependency();
 builder.Services.AddCoreDependency();
 builder.Services.AddAuthentication(options =>
     {
@@ -56,6 +58,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddLocalization();
 
 var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -86,5 +89,7 @@ app.UseRequestLocalization(new RequestLocalizationOptions
 });
 
 app.MapControllers();
+
+app.StartDatabaseConnection();
 
 app.Run();
