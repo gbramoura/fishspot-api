@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FishSpotApi.Domain", "src\F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishSpotApi.Data", "src\FishSpotApi.Data\FishSpotApi.Data.csproj", "{4B5638D3-F646-4FAC-964F-0B536926108D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishSpotApi.Logger", "FishSpotApi.Logger\FishSpotApi.Logger.csproj", "{0F58CB9A-A357-4107-9500-32097B407E8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishSpotApi.Logger", "src\FishSpotApi.Logger\FishSpotApi.Logger.csproj", "{0F58CB9A-A357-4107-9500-32097B407E8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

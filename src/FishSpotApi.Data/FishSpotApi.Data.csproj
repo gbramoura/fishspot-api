@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FishSpotApi.Logger\FishSpotApi.Logger.csproj" />
+    <ProjectReference Include="..\FishSpotApi.Logger\FishSpotApi.Logger.csproj" />
   </ItemGroup>
 
 </Project>
