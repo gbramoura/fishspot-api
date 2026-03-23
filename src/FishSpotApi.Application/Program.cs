@@ -1,14 +1,15 @@
-using System.Globalization;
-using FishSpotApi.Core;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.Text.Json.Serialization;
 using FishSpotApi.Application.ConfigurationExtension;
 using FishSpotApi.Application.Filters;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Localization;
+using FishSpotApi.Application.Middlewares;
+using FishSpotApi.Core;
 using FishSpotApi.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,8 @@ builder.Services.AddLocalization();
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestLoggingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -72,7 +75,7 @@ app.UseCors(ops =>
     ops.AllowAnyHeader();
 });
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 
 var supportedCultures = new[]

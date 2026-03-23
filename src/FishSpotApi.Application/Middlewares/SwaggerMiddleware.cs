@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 
 namespace FishSpotApi.Application.ConfigurationExtension;
 
-public static class SwaggerExtension
+public static class SwaggerMiddleware
 {
     public static IServiceCollection AddSwaggerGenWithAuth(this IServiceCollection services)
     {
@@ -18,7 +18,7 @@ public static class SwaggerExtension
                 Scheme = JwtBearerDefaults.AuthenticationScheme,
                 BearerFormat = "JWT",
             });
-            
+
             options.AddSecurityRequirement(
                 new OpenApiSecurityRequirement()
                 {
@@ -38,9 +38,9 @@ public static class SwaggerExtension
                     }
                 }
             );
-        
-            options.SwaggerDoc("v1", 
-                new OpenApiInfo 
+
+            options.SwaggerDoc("v1",
+                new OpenApiInfo
                 {
                     Version = "v0.0.1",
                     Title = "FishSpot API",
@@ -50,7 +50,7 @@ public static class SwaggerExtension
                         Email = "gabrielalves.dev@gmail.com",
                         Name = "Gabriel Alves de Moura",
                         Url = new Uri("https://github.com/gbramoura"),
-                    }                       
+                    }
                 }
             );
         });

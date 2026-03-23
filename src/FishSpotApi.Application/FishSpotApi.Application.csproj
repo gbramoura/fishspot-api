@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FishSpotApi.Core\FishSpotApi.Core.csproj" />
     <ProjectReference Include="..\FishSpotApi.Domain\FishSpotApi.Domain.csproj" />
+    <ProjectReference Include="..\FishSpotApi.Logger\FishSpotApi.Logger.csproj" />
   </ItemGroup>
 
 </Project>
