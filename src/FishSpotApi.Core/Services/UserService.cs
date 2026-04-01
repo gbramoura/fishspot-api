@@ -16,13 +16,13 @@ namespace FishSpotApi.Core.Services;
 public class UserService(
     UserRepository userRepository,
     SpotRepository spotRepository,
-    TokenService tokenService, 
-    MailService mailService, 
-    RecoverTokenService recoverTokenService, 
+    TokenService tokenService,
+    MailService mailService,
+    RecoverTokenService recoverTokenService,
     IStringLocalizerFactory factory)
 {
     private readonly IStringLocalizer _localizer = factory.Create(typeof(FishSpotResource));
-    
+
     public void RegisterUser(UserRegisterRequest payload)
     {
         var username = GenerateUsername(payload.Name);
@@ -30,7 +30,7 @@ public class UserService(
         {
             username = GenerateUsername(payload.Name);
         }
-            
+
         userRepository.Insert(new UserEntity
         {
             Email = payload.Email,
@@ -49,9 +49,9 @@ public class UserService(
         {
             throw new UserNotFoundException(_localizer["user_not_found"]);
         }
-        
+
         var details = spotRepository.GetSpotDetailsByUser(userId);
-        
+
         var mappedUser = UserMapper.UserEntityToUserResponse(user);
         var filledUser = UserMapper.SpotDetailsToUserResponse(details, mappedUser);
         return filledUser;
@@ -69,11 +69,11 @@ public class UserService(
         {
             throw new UserNotFoundException(_localizer["user_username_in_use"]);
         }
-        
+
         var userEntity = UserMapper.UserUpdateRequestToUserEntity(user, payload);
         userRepository.Update(userEntity);
     }
-    
+
     public bool IsUniqueEmail(string email) => userRepository.GetByEmail(email).Any();
 
     public bool IsUniqueUsername(string username) => !userRepository.GetByUsername(username).Any();
@@ -83,12 +83,12 @@ public class UserService(
         var user = userRepository.GetByEmail(payload.Email).FirstOrDefault();
         if (user is null)
         {
-            throw new UserNotFoundException(_localizer["user_not_found"]);
+            throw new UserNotFoundException(_localizer["user_or_password_incorrect"]);
         }
 
         if (!PasswordUtils.VerifyPassword(user.Password, payload.Password))
         {
-            throw new IncorrectPasswordException(_localizer["user_password_incorrect"]);
+            throw new IncorrectPasswordException(_localizer["user_or_password_incorrect"]);
         }
 
         var userRefreshToken = tokenService.GenerateRefreshToken();
@@ -162,7 +162,7 @@ public class UserService(
         {
             throw new InvalidRecoverTokenException(_localizer["token_invalid"]);
         }
-            
+
         recoverTokenService.DeleteToken(payload.Token, payload.Email);
         user.Password = PasswordUtils.EncryptPassword(payload.NewPassword);
 
@@ -196,7 +196,7 @@ public class UserService(
         {
             username = username.Substring(0, 15);
         }
-        
+
         var random = new Random();
         var numbers = string.Empty;
         for (var i = 0; i < 4; i++)

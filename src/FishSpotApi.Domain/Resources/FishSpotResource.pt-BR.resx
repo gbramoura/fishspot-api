@@ -1,258 +1,360 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-        <xsd:element name="root" msdata:IsDataSet="true">
-            
-        </xsd:element>
-    </xsd:schema>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>1.3</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <data name="unauthorized" xml:space="preserve">
-        <value>Não autorizado</value>
-    </data>
-    <data name="email_in_use" xml:space="preserve">
-        <value>Email já em uso</value>
-    </data>
-    <data name="user_register_successfully" xml:space="preserve">
-        <value>Usuário registrado com sucesso</value>
-    </data>
-    <data name="internal_server_error" xml:space="preserve">
-        <value>Erro interno do servidor</value>
-    </data>
-    <data name="user_authenticated" xml:space="preserve">
-        <value>Usuário corretamente autenticado</value>
-    </data>
-    <data name="is_authenticated" xml:space="preserve">
-        <value>Autenticado</value>
-    </data>
-    <data name="token_refreshed" xml:space="preserve">
-        <value>Token atualizado</value>
-    </data>
-    <data name="token_email_sent" xml:space="preserve">
-        <value>Um token para validação foi enviado para o email</value>
-    </data>
-    <data name="token_valid" xml:space="preserve">
-        <value>O token é valido</value>
-    </data>
-    <data name="token_invalid" xml:space="preserve">
-        <value>O token não é valido</value>
-    </data>
-    <data name="password_changed" xml:space="preserve">
-        <value>Senha alterada com sucesso</value>
-    </data>
-    <data name="resource_attached" xml:space="preserve">
-        <value>O recurso foi anexado ao ponto</value>
-    </data>
-    <data name="resource_detached" xml:space="preserve">
-        <value>O recurso foi desanexado do ponto</value>
-    </data>
-    <data name="spot_registered_successfully" xml:space="preserve">
-        <value>Ponto registrado com sucesso</value>
-    </data>
-    <data name="spot_find" xml:space="preserve">
-        <value>Ponto encontrado</value>
-    </data>
-    <data name="spot_location_find" xml:space="preserve">
-        <value>Localizações de pontos encontrados</value>
-    </data>
-    <data name="spot_updated_successfully" xml:space="preserve">
-        <value>Ponto alterado com sucesso</value>
-    </data>
-    <data name="spot_deleted_successfully" xml:space="preserve">
-        <value>Ponto removido com sucesso</value>
-    </data>
-    <data name="user_not_found" xml:space="preserve">
-        <value>Usuário não encontrado</value>
-    </data>
-    <data name="user_password_incorrect" xml:space="preserve">
-        <value>A senha não esta correta</value>
-    </data>
-    <data name="token_refresh_invalid" xml:space="preserve">
-        <value>Token para atualizar é invalido</value>
-    </data>
-    <data name="spot_not_found" xml:space="preserve">
-        <value>Ponto não encontrado</value>
-    </data>
-    <data name="user_not_authorized_to_update_spot" xml:space="preserve">
-        <value>Usuário não é autorizado para atualizar o ponto</value>
-    </data>
-    <data name="user_not_authorized_to_delete_spot" xml:space="preserve">
-        <value>Usuário não é autorizado a deletar o ponto</value>
-    </data>
-    <data name="resource_not_found" xml:space="preserve">
-        <value>Recurso não encontrado</value>
-    </data>
-    <data name="resource_unable_to_save" xml:space="preserve">
-        <value>Não foi possivel salvar os arquivos </value>
-    </data>
-    <data name="resource_unable_to_detach" xml:space="preserve">
-        <value>Um erro foi encontrado enquanto tentava desanexar os arquivos</value>
-    </data>
-    <data name="token_not_found" xml:space="preserve">
-        <value>Token não encontrado</value>
-    </data>
-    <data name="mail_title" xml:space="preserve">
-        <value>Codigo de Verificação</value>
-    </data>
-    <data name="mail_description" xml:space="preserve">
-        <value>O FishSpot recebeu uma requisição para usar este email para alterar a senha do usuário</value>
-    </data>
-    <data name="mail_code_description" xml:space="preserve">
-        <value>Use esse codigo para mudar a sua senha</value>
-    </data>
-    <data name="mail_warning_description" xml:space="preserve">
-        <value>Se você não reconhece esta conta no FishSpot ou não solicitou uma alteração de senha, alguém pode estar se passando por você</value>
-    </data>
-    <data name="mail_subject" xml:space="preserve">
-        <value>Recuperação de Senha</value>
-    </data>
-    <data name="resource_file_allowed" xml:space="preserve">
-        <value>Apenas arquivos com extensão {0} são permitidos</value>
-    </data>
-    <data name="resource_file_not_found" xml:space="preserve">
-        <value>Arquivo {0} não encontrado</value>
-    </data>
-    <data name="annotation_password_required" xml:space="preserve">
-        <value>A senha deve ser preenchida</value>
-    </data>
-    <data name="annotation_password_min_length" xml:space="preserve">
-        <value>A senha deve ter mais de 8 caracteres</value>
-    </data>
-    <data name="annotation_email_required" xml:space="preserve">
-        <value>O e-mail deve ser preenchido</value>
-    </data>
-    <data name="annotation_email_validation" xml:space="preserve">
-        <value>O e-mail não é válido</value>
-    </data>
-    <data name="annotation_email_max_length" xml:space="preserve">
-        <value>O limite de 245 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_name_required" xml:space="preserve">
-        <value>O campo nome deve ser preenchido</value>
-    </data>
-    <data name="annotation_name_max_length" xml:space="preserve">
-        <value>O limite de 245 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_token_required" xml:space="preserve">
-        <value>O token deve ser preenchido</value>
-    </data>
-    <data name="annotation_refresh_token_required" xml:space="preserve">
-        <value>O refresh token deve ser preenchido</value>
-    </data>
-    <data name="annotation_token_max_length" xml:space="preserve">
-        <value>O limite de 5 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_page_size_required" xml:space="preserve">
-        <value>O tamanho da página é obrigatório</value>
-    </data>
-    <data name="annotation_page_size_range" xml:space="preserve">
-        <value>O tamanho da página deve ser maior que 0</value>
-    </data>
-    <data name="annotation_page_number_required" xml:space="preserve">
-        <value>O número da página é obrigatório</value>
-    </data>
-    <data name="annotation_page_number_range" xml:space="preserve">
-        <value>O número da página deve ser maior que 0</value>
-    </data>
-    <data name="annotation_spot_required" xml:space="preserve">
-        <value>O identificador único do local deve ser preenchido</value>
-    </data>
-    <data name="annotation_files_required" xml:space="preserve">
-        <value>A lista de arquivos deve ser preenchida</value>
-    </data>
-    <data name="annotation_files_min_length" xml:space="preserve">
-        <value>O número mínimo de IDs de arquivo deve ser de pelo menos um</value>
-    </data>
-    <data name="annotation_new_password_required" xml:space="preserve">
-        <value>A nova senha deve ser preenchida</value>
-    </data>
-    <data name="annotation_files_max_length" xml:space="preserve">
-        <value>O limite de 30 arquivos foi atingido</value>
-    </data>
-    <data name="annotation_title_required" xml:space="preserve">
-        <value>O título deve ser preenchido</value>
-    </data>
-    <data name="annotation_observation_max_length" xml:space="preserve">
-        <value>O limite de 245 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_coordinates_required" xml:space="preserve">
-        <value>As coordenadas devem ser preenchidas</value>
-    </data>
-    <data name="annotation_coordinates_max_length" xml:space="preserve">
-        <value>As coordenadas devem ter no máximo 2 caracteres</value>
-    </data>
-    <data name="annotation_coordinates_min_length" xml:space="preserve">
-        <value>As coordenadas devem ter pelo menos 2 caracteres</value>
-    </data>
-    <data name="annotation_fishs_min_length" xml:space="preserve">
-        <value>Comprimento mínimo de peixes obrigatório</value>
-    </data>
-    <data name="annotation_rate_required" xml:space="preserve">
-        <value>A taxa de dificuldade do local deve ser preenchida</value>
-    </data>
-    <data name="annotation_risk_required" xml:space="preserve">
-        <value>A taxa de risco do local deve ser preenchida</value>
-    </data>
-    <data name="annotation_weight_required" xml:space="preserve">
-        <value>O peso deve ser preenchido</value>
-    </data>
-    <data name="annotation_unit_measure_required" xml:space="preserve">
-        <value>A unidade de medida deve ser preenchida</value>
-    </data>
-    <data name="annotation_lures_min_length" xml:space="preserve">
-        <value>O número mínimo de iscas deve ser de pelo menos um</value>
-    </data>
-    <data name="annotation_lures_max_length" xml:space="preserve">
-        <value>O limite de iscas foi atingido</value>
-    </data>
-    <data name="user_default_description" xml:space="preserve">
-        <value>A vida é como pescar: às vezes você pega um peixe grande, às vezes volta com as mãos vazias</value>
-    </data>
-    <data name="user_found_successfully" xml:space="preserve">
-        <value>Usuário encontrado com sucesso</value>
-    </data>
-    <data name="annotation_description_max_length" xml:space="preserve">
-        <value>O limite de 245 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_description_required" xml:space="preserve">
-        <value>A descrição deve ser preenchidas</value>
-    </data>
-    <data name="annotation_neighborhood_max_length" xml:space="preserve">
-        <value>O limite de 245 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_street_max_length" xml:space="preserve">
-        <value>O limite de 245 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_username_max_length" xml:space="preserve">
-        <value>O limite de 20 caracteres foi atingido</value>
-    </data>
-    <data name="annotation_zip_code_max_length" xml:space="preserve">
-        <value>O limite de 8 caracteres foi atingido</value>
-    </data>
-    <data name="user_updated_successfully" xml:space="preserve">
-        <value>Usuário atualizado com sucesso</value>
-    </data>
-    <data name="resource_attached_to_user" xml:space="preserve">
-        <value>O recurso foi anexado ao usuario</value>
-    </data>
-    <data name="annotation_user_file_required" xml:space="preserve">
-        <value>O arquivo deve ser preenchido</value>
-    </data>
-    <data name="user_username_in_use" xml:space="preserve">
-        <value>Nome de usuário já está em uso</value>
-    </data>
-    <data name="annotation_date_required" xml:space="preserve">
-        <value>A data deve ser preenchida</value>
-    </data>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="unauthorized" xml:space="preserve">
+    <value>Não autorizado</value>
+  </data>
+  <data name="email_in_use" xml:space="preserve">
+    <value>Email já em uso</value>
+  </data>
+  <data name="user_register_successfully" xml:space="preserve">
+    <value>Usuário registrado com sucesso</value>
+  </data>
+  <data name="internal_server_error" xml:space="preserve">
+    <value>Erro interno do servidor</value>
+  </data>
+  <data name="user_authenticated" xml:space="preserve">
+    <value>Usuário corretamente autenticado</value>
+  </data>
+  <data name="is_authenticated" xml:space="preserve">
+    <value>Autenticado</value>
+  </data>
+  <data name="token_refreshed" xml:space="preserve">
+    <value>Token atualizado</value>
+  </data>
+  <data name="token_email_sent" xml:space="preserve">
+    <value>Um token para validação foi enviado para o email</value>
+  </data>
+  <data name="token_valid" xml:space="preserve">
+    <value>O token é valido</value>
+  </data>
+  <data name="token_invalid" xml:space="preserve">
+    <value>O token não é valido</value>
+  </data>
+  <data name="password_changed" xml:space="preserve">
+    <value>Senha alterada com sucesso</value>
+  </data>
+  <data name="resource_attached" xml:space="preserve">
+    <value>O recurso foi anexado ao ponto</value>
+  </data>
+  <data name="resource_detached" xml:space="preserve">
+    <value>O recurso foi desanexado do ponto</value>
+  </data>
+  <data name="spot_registered_successfully" xml:space="preserve">
+    <value>Ponto registrado com sucesso</value>
+  </data>
+  <data name="spot_find" xml:space="preserve">
+    <value>Ponto encontrado</value>
+  </data>
+  <data name="spot_location_find" xml:space="preserve">
+    <value>Localizações de pontos encontrados</value>
+  </data>
+  <data name="spot_updated_successfully" xml:space="preserve">
+    <value>Ponto alterado com sucesso</value>
+  </data>
+  <data name="spot_deleted_successfully" xml:space="preserve">
+    <value>Ponto removido com sucesso</value>
+  </data>
+  <data name="user_not_found" xml:space="preserve">
+    <value>Usuário não encontrado</value>
+  </data>
+  <data name="user_password_incorrect" xml:space="preserve">
+    <value>A senha não esta correta</value>
+  </data>
+  <data name="token_refresh_invalid" xml:space="preserve">
+    <value>Token para atualizar é invalido</value>
+  </data>
+  <data name="spot_not_found" xml:space="preserve">
+    <value>Ponto não encontrado</value>
+  </data>
+  <data name="user_not_authorized_to_update_spot" xml:space="preserve">
+    <value>Usuário não é autorizado para atualizar o ponto</value>
+  </data>
+  <data name="user_not_authorized_to_delete_spot" xml:space="preserve">
+    <value>Usuário não é autorizado a deletar o ponto</value>
+  </data>
+  <data name="resource_not_found" xml:space="preserve">
+    <value>Recurso não encontrado</value>
+  </data>
+  <data name="resource_unable_to_save" xml:space="preserve">
+    <value>Não foi possivel salvar os arquivos </value>
+  </data>
+  <data name="resource_unable_to_detach" xml:space="preserve">
+    <value>Um erro foi encontrado enquanto tentava desanexar os arquivos</value>
+  </data>
+  <data name="token_not_found" xml:space="preserve">
+    <value>Token não encontrado</value>
+  </data>
+  <data name="mail_title" xml:space="preserve">
+    <value>Codigo de Verificação</value>
+  </data>
+  <data name="mail_description" xml:space="preserve">
+    <value>O FishSpot recebeu uma requisição para usar este email para alterar a senha do usuário</value>
+  </data>
+  <data name="mail_code_description" xml:space="preserve">
+    <value>Use esse codigo para mudar a sua senha</value>
+  </data>
+  <data name="mail_warning_description" xml:space="preserve">
+    <value>Se você não reconhece esta conta no FishSpot ou não solicitou uma alteração de senha, alguém pode estar se passando por você</value>
+  </data>
+  <data name="mail_subject" xml:space="preserve">
+    <value>Recuperação de Senha</value>
+  </data>
+  <data name="resource_file_allowed" xml:space="preserve">
+    <value>Apenas arquivos com extensão {0} são permitidos</value>
+  </data>
+  <data name="resource_file_not_found" xml:space="preserve">
+    <value>Arquivo {0} não encontrado</value>
+  </data>
+  <data name="annotation_password_required" xml:space="preserve">
+    <value>A senha deve ser preenchida</value>
+  </data>
+  <data name="annotation_password_min_length" xml:space="preserve">
+    <value>A senha deve ter mais de 8 caracteres</value>
+  </data>
+  <data name="annotation_email_required" xml:space="preserve">
+    <value>O e-mail deve ser preenchido</value>
+  </data>
+  <data name="annotation_email_validation" xml:space="preserve">
+    <value>O e-mail não é válido</value>
+  </data>
+  <data name="annotation_email_max_length" xml:space="preserve">
+    <value>O limite de 245 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_name_required" xml:space="preserve">
+    <value>O campo nome deve ser preenchido</value>
+  </data>
+  <data name="annotation_name_max_length" xml:space="preserve">
+    <value>O limite de 245 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_token_required" xml:space="preserve">
+    <value>O token deve ser preenchido</value>
+  </data>
+  <data name="annotation_refresh_token_required" xml:space="preserve">
+    <value>O refresh token deve ser preenchido</value>
+  </data>
+  <data name="annotation_token_max_length" xml:space="preserve">
+    <value>O limite de 5 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_page_size_required" xml:space="preserve">
+    <value>O tamanho da página é obrigatório</value>
+  </data>
+  <data name="annotation_page_size_range" xml:space="preserve">
+    <value>O tamanho da página deve ser maior que 0</value>
+  </data>
+  <data name="annotation_page_number_required" xml:space="preserve">
+    <value>O número da página é obrigatório</value>
+  </data>
+  <data name="annotation_page_number_range" xml:space="preserve">
+    <value>O número da página deve ser maior que 0</value>
+  </data>
+  <data name="annotation_spot_required" xml:space="preserve">
+    <value>O identificador único do local deve ser preenchido</value>
+  </data>
+  <data name="annotation_files_required" xml:space="preserve">
+    <value>A lista de arquivos deve ser preenchida</value>
+  </data>
+  <data name="annotation_files_min_length" xml:space="preserve">
+    <value>O número mínimo de IDs de arquivo deve ser de pelo menos um</value>
+  </data>
+  <data name="annotation_new_password_required" xml:space="preserve">
+    <value>A nova senha deve ser preenchida</value>
+  </data>
+  <data name="annotation_files_max_length" xml:space="preserve">
+    <value>O limite de 30 arquivos foi atingido</value>
+  </data>
+  <data name="annotation_title_required" xml:space="preserve">
+    <value>O título deve ser preenchido</value>
+  </data>
+  <data name="annotation_observation_max_length" xml:space="preserve">
+    <value>O limite de 245 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_coordinates_required" xml:space="preserve">
+    <value>As coordenadas devem ser preenchidas</value>
+  </data>
+  <data name="annotation_coordinates_max_length" xml:space="preserve">
+    <value>As coordenadas devem ter no máximo 2 caracteres</value>
+  </data>
+  <data name="annotation_coordinates_min_length" xml:space="preserve">
+    <value>As coordenadas devem ter pelo menos 2 caracteres</value>
+  </data>
+  <data name="annotation_fishs_min_length" xml:space="preserve">
+    <value>Comprimento mínimo de peixes obrigatório</value>
+  </data>
+  <data name="annotation_rate_required" xml:space="preserve">
+    <value>A taxa de dificuldade do local deve ser preenchida</value>
+  </data>
+  <data name="annotation_risk_required" xml:space="preserve">
+    <value>A taxa de risco do local deve ser preenchida</value>
+  </data>
+  <data name="annotation_weight_required" xml:space="preserve">
+    <value>O peso deve ser preenchido</value>
+  </data>
+  <data name="annotation_unit_measure_required" xml:space="preserve">
+    <value>A unidade de medida deve ser preenchida</value>
+  </data>
+  <data name="annotation_lures_min_length" xml:space="preserve">
+    <value>O número mínimo de iscas deve ser de pelo menos um</value>
+  </data>
+  <data name="annotation_lures_max_length" xml:space="preserve">
+    <value>O limite de iscas foi atingido</value>
+  </data>
+  <data name="user_default_description" xml:space="preserve">
+    <value>A vida é como pescar: às vezes você pega um peixe grande, às vezes volta com as mãos vazias</value>
+  </data>
+  <data name="user_found_successfully" xml:space="preserve">
+    <value>Usuário encontrado com sucesso</value>
+  </data>
+  <data name="annotation_description_required" xml:space="preserve">
+    <value>A descrição deve ser preenchidas</value>
+  </data>
+  <data name="annotation_description_max_length" xml:space="preserve">
+    <value>O limite de 245 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_username_max_length" xml:space="preserve">
+    <value>O limite de 20 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_street_max_length" xml:space="preserve">
+    <value>O limite de 245 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_neighborhood_max_length" xml:space="preserve">
+    <value>O limite de 245 caracteres foi atingido</value>
+  </data>
+  <data name="annotation_zip_code_max_length" xml:space="preserve">
+    <value>O limite de 8 caracteres foi atingido</value>
+  </data>
+  <data name="user_updated_successfully" xml:space="preserve">
+    <value>Usuário atualizado com sucesso</value>
+  </data>
+  <data name="resource_attached_to_user" xml:space="preserve">
+    <value>O recurso foi anexado ao usuario</value>
+  </data>
+  <data name="annotation_user_file_required" xml:space="preserve">
+    <value>O arquivo deve ser preenchido</value>
+  </data>
+  <data name="user_username_in_use" xml:space="preserve">
+    <value>Nome de usuário já está em uso</value>
+  </data>
+  <data name="annotation_date_required" xml:space="preserve">
+    <value>A data deve ser preenchida</value>
+  </data>
+  <data name="user_or_password_incorrect" xml:space="preserve">
+    <value>Usuário ou senha incorretos</value>
+  </data>
 </root>

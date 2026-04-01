@@ -12,9 +12,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\FishSpotResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FishSpotResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\FishSpotResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>FishSpotResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\FishSpotResource.pt-BR.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
